@@ -15,8 +15,12 @@ function init(){
     );
     */
 
+    /*
     player1 = {x: [1, 2, 3], y: [0, 1, 2]};
     player2 = {x: [1, 2, 3], y: [1, 3, 8]};
+    */
+    player1 = {x: [0], y: [0]}
+    player2 = {x: [0], y: [0]}
 
     layout = {
         title: 'Racquetball game',
@@ -37,11 +41,11 @@ function init(){
 
 function addScore(playerAdd, playerSame){
     // increment the y value to add a point
-    playerAdd.x.push(playerAdd.x.length + 1);
+    playerAdd.x.push(playerAdd.x[playerAdd.x.length - 1] + 1);
     playerAdd.y.push(playerAdd.y[playerAdd.y.length - 1] + 1);
     
     // keep the y value the same since they have the same score as before
-    playerSame.x.push(playerSame.x.length + 1);
+    playerSame.x.push(playerSame.x[playerSame.x.length - 1] + 1);
     playerSame.y.push(playerSame.y[playerSame.y.length - 1]);
 }
 
@@ -52,5 +56,13 @@ function player1AddScore(){
 
 function player2AddScore(){
     addScore(player2, player1);
+    Plotly.redraw('plot');
+}
+
+function newGame(){
+    player1.x = [0]
+    player1.y = [0]
+    player2.x = [0]
+    player2.y = [0]
     Plotly.redraw('plot');
 }
