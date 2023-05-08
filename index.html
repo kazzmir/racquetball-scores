@@ -1,0 +1,89 @@
+<html>
+<head>
+    <script src="js/plotly-2.20.0.min.js" charset="utf-8"></script>
+    <script src="js/code.js"></script>
+
+    <style>
+        /* make the body have a dark grey background */
+        #body {
+            background-color: #333;
+        }
+
+        .inner{
+            padding: 5px;
+        }
+
+        /* player1 should be on the left side of the graph */
+        #player1{
+            float: left;
+            width: 15%;
+            height: 60%;
+            margin-top: 20px;
+            margin-left: 10px;
+            border: 1px solid #888;
+            box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
+        }
+
+        /* graph div should be smaller than the body
+         * and have a thin white border with a drop shadow
+         */
+        #graph {
+            float: left;
+            margin-top: 20px;
+            margin-left: 10px;
+            width: 60%;
+            height: 60%;
+            border: 1px solid #888;
+            box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
+        }
+
+        #player2 {
+            float: left;
+            width: 15%;
+            height: 60%;
+            margin-top: 20px;
+            margin-left: 10px;
+            border: 1px solid #888;
+            box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
+        }
+
+        #plot {
+            margin: 5px;
+            height: 98%;
+        }
+
+        .text {
+            color: white;
+            font-family: sans-serif;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+    </style>
+
+</head>
+<body id="body" onload="init()">
+
+    <span class="text">Racquetball Scores</span>
+    <div>
+        <div id="player1">
+            <div class="inner">
+                <span class="text">Player 1</span>
+                <input type="text" value="..name..">
+                <br />
+                <button id="player1Button" onclick="player1AddScore()">Add Point</button>
+            </div>
+        </div>
+        <div id="graph">
+            <div id="plot"></div>
+        </div>
+        <div id="player2">
+            <div class="inner">
+                <span class="text">Player 2</span>
+                <br />
+                <button id="player2Button" onclick="player2AddScore()">Add Point</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
