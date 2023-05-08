@@ -59,16 +59,33 @@
             margin-left: 10px;
         }
 
+        #buttons {
+            margin-left: 40%;
+            margin-top: 10px;
+            width: 20%;
+            height: 5%;
+            font-size: 20px;
+        }
+
         /* the newgame button should be under where the plot is but be in the center of the screen.
          * the button should have a light-bluish tint to it.
          */
         #newgame {
+            font-size: 20px;
+            background-color: #00bfff;
+        }
+
+        /* morebuttons should be under buttons */
+        #morebuttons {
             margin-left: 45%;
             margin-top: 10px;
             width: 10%;
             height: 5%;
             font-size: 20px;
-            background-color: #00bfff;
+        }
+
+        #z {
+            clear: both;
         }
 
     </style>
@@ -83,7 +100,6 @@
                 <span class="text">Player 1</span>
                 <input type="text" value="..name..">
                 <br />
-                <button id="player1Button" onclick="player1AddScore()">Add Point</button>
             </div>
         </div>
         <div id="graph">
@@ -93,12 +109,19 @@
             <div class="inner">
                 <span class="text">Player 2</span>
                 <br />
-                <button id="player2Button" onclick="player2AddScore()">Add Point</button>
             </div>
         </div>
     </div>
 
-    <br />
-    <button id="newgame" onclick="newGame()">New Game</button>
+    <div id="z">
+        <div id="buttons">
+            <button id="player1Button" onclick="player1AddScore()">Server wins rally</button>
+            <button id="player1Button" onclick="sideout()">Side out</button>
+            <button id="player2Button" onclick="player2AddScore()">Player2 Add Point</button>
+        </div>
+        <div id="morebuttons">
+            <button id="newgame" onclick="newGame()">New Game</button>
+        </div>
+    </div>
 </body>
 </html>
