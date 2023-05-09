@@ -59,13 +59,27 @@
             margin-left: 10px;
         }
 
+        .text2 {
+            color: white;
+            font-family: sans-serif;
+            font-size: 15px;
+            margin-left: 10px;
+        }
+
+        .text3 {
+            color: yellow;
+            font-family: sans-serif;
+            font-size: 15px;
+            margin-left: 10px;
+        }
+
         .center {
             margin-left: 40%;
             width: 20%;
         }
 
         #buttons {
-            margin-left: 40%;
+            margin-left: 42%;
             margin-top: 10px;
             width: 20%;
             height: 5%;
@@ -91,6 +105,7 @@
 
         #z {
             clear: both;
+            padding-top: 20px;
         }
 
     </style>
@@ -103,8 +118,11 @@
         <div id="player1">
             <div class="inner">
                 <span class="text">Player 1</span>
+                <span class="text" id="player1Score">Score: 0</span>
                 <br />
-                <input id="player1Name" type="text" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
+                <span class="text2">Name</span> <input id="player1Name" type="text" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
+                <br /> <br />
+                <span class="text3" id="player1State">Serving</span>
                 <br />
                 <button id="player1Server" onclick="setPlayer1Serving()">Set as server</button>
             </div>
@@ -115,8 +133,11 @@
         <div id="player2">
             <div class="inner">
                 <span class="text">Player 2</span>
+                <span class="text" id="player2Score">Score: 0</span>
                 <br />
-                <input id="player2Name" type="text" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
+                <span class="text2">Name</span> <input id="player2Name" type="text" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
+                <br /> <br />
+                <span class="text3" id="player2State">Receiving</span>
                 <br />
                 <button id="player2Server" onclick="setPlayer2Serving()">Set as server</button>
             </div>
@@ -124,10 +145,10 @@
     </div>
 
     <div id="z">
-        <span id="state" class="text center">Player1 (serving) 0 - 0 Player2</span>
+        <span id="state" class="text center">player1 (serving) 0 - 0 player2. Rally 1</span>
         <br />
         <div id="buttons">
-            <button id="serverWins" onclick="serverWins()()">Server wins rally</button>
+            <button id="serverWins" onclick="serverWins()">Server wins rally</button>
             <button id="sideout" onclick="sideout()">Side out</button>
         </div>
         <div id="morebuttons">

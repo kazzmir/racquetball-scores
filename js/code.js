@@ -3,20 +3,28 @@
  * rally scoring
  */
 
-let player1 = {name: "player1", x: [0], y: [0], score: 0, serving: true};
-let player2 = {name: "player2", x: [0], y: [0], score: 0, serving: false};
+let player1 = {name: "player1", x: [1], y: [0], score: 0, serving: true, hovertemplate: "Score %{y}, Rally %{x}"};
+let player2 = {name: "player2", x: [1], y: [0], score: 0, serving: false, hovertemplate: "Score %{y}, Rally %{x}"}
 
 function initialLayout(){
     return {
         title: 'Racquetball game',
+        paper_bgcolor: '#eee',
+        plot_bgcolor: '#eee',
         xaxis: {
             title: 'Rally',
-            range: [0, 20]
+            range: [1, 20]
         },
         yaxis: {
             title: 'Score',
             range: [0, 20]
+        },
+        /*
+        grid: {
+            // columns: 10,
+            rows: 15,
         }
+        */
     }
 }
 
@@ -81,19 +89,32 @@ function animate(){
         }
     }
 
-    Plotly.animate('plot', {data: [trace1, trace2], traces: [0, 1], layout: {xaxis: {range: [0, rangeX]}}}, transition).then(function(){
+    Plotly.animate('plot', {data: [trace1, trace2], traces: [0, 1], layout: {xaxis: {range: [1, rangeX]}}}, transition).then(function(){
         // console.log("finished animating");
         // Plotly.redraw('plot');
     }) 
 }
 
 function updateState(){
+    let player1State = document.getElementById('player1State');
+    let player2State = document.getElementById('player2State');
+
     let state = document.getElementById('state');
     if (player1.serving) {
         state.innerHTML = `${player1.name} (serving) ${player1.score} - ${player2.score} ${player2.name}`;
+        player1State.innerHTML = "Serving"
+        player2State.innerHTML = "Receiving"
     } else {
         state.innerHTML = `${player1.name} ${player1.score} - ${player2.score} ${player2.name} (serving)`;
+        player2State.innerHTML = "Serving"
+        player1State.innerHTML = "Receiving"
     }
+
+    let player1Score = document.getElementById('player1Score');
+    player1Score.innerHTML = `Score: ${player1.score}`;
+    let player2Score = document.getElementById('player2Score');
+    player2Score.innerHTML = `Score: ${player2.score}`;
+
 }
 
 function player1AddScore(){
@@ -151,11 +172,11 @@ function sideout(){
 }
 
 function newGame(){
-    player1.x = [0]
+    player1.x = [1]
     player1.y = [0]
     player1.score = 0
     player1.serving = true
-    player2.x = [0]
+    player2.x = [1]
     player2.y = [0]
     player2.score = 0
     player2.serving = false
