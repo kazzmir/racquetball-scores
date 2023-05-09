@@ -6,6 +6,21 @@
 let player1 = {name: "player1", x: [1], y: [0], score: 0, serving: true, hovertemplate: "Score %{y}, Rally %{x}"};
 let player2 = {name: "player2", x: [1], y: [0], score: 0, serving: false, hovertemplate: "Score %{y}, Rally %{x}"}
 
+function eventServerWins(){
+    return {
+        type: "server-wins"
+    }
+}
+
+function eventSideout(){
+    return {
+        type: "sideout"
+    }
+}
+
+// timeline of events
+let timeline = [];
+
 function initialLayout(){
     return {
         title: 'Racquetball game',
@@ -160,6 +175,8 @@ function serverWins(){
     } else {
         player2AddScore()
     }
+
+    timeline.push(eventServerWins())
 }
 
 function sideout(){
@@ -169,6 +186,7 @@ function sideout(){
     player2.serving = !player2.serving;
     animate();
     updateState();
+    timeline.push(eventSideout())
 }
 
 function newGame(){
