@@ -6,33 +6,22 @@ function init(){
 
     let plotDiv = document.getElementById('plot');
 
-    /*
-    Plotly.newPlot(plot, [{
-        x: [1, 2, 3, 4, 5],
-        y: [1, 2, 4, 8, 16] }], {
-            margin: { t: 0 }
-        }
-    );
-    */
-
-    /*
-    player1 = {x: [1, 2, 3], y: [0, 1, 2]};
-    player2 = {x: [1, 2, 3], y: [1, 3, 8]};
-    */
     player1 = {x: [0], y: [0]}
     player2 = {x: [0], y: [0]}
 
     layout = {
         title: 'Racquetball game',
         xaxis: {
-            title: 'Rally'
+            title: 'Rally',
+            range: [0, 20]
         },
         yaxis: {
-            title: 'Score'
+            title: 'Score',
+            range: [0, 20]
         }
     }
 
-    let plot = Plotly.newPlot(plotDiv, [player1, player2], layout);
+    let plot = Plotly.newPlot(plotDiv, [{...player1}, {...player2}], layout);
 
     window.onresize = function(){
         Plotly.Plots.resize(plotDiv);
@@ -49,50 +38,43 @@ function addScore(playerAdd, playerSame){
     playerSame.y.push(playerSame.y[playerSame.y.length - 1]);
 }
 
-function player1AddScore(){
+function animate(){
     let plotDiv = document.getElementById('plot');
 
-    // Plotly.extendTraces('plot', {x: [[player1.x[player1.x.length - 1] + 1]], y: [[player1.y[player1.y.length - 1] + 1]]}, [0]);
-    // Plotly.extendTraces('plot', {x: [[player2.x[player2.x.length - 1] + 1]], y: [[player2.y[player2.y.length - 1]]]}, [1]);
-    // Plotly.redraw('plot');
-    addScore(player1, player2);
-    Plotly.redraw('plot');
-    /*
-    var p1 = {x: [...player1.x] + [player1.x[player1.x.length-1]], y: [...player1.y] + [player1.y[player1.y.length-1]]}
-    p1 = {x: [...player1.x].concat([player1.x[player1.x.length-1]+1]), y: [...player1.y].concat([player1.y[player1.y.length-1]])}
-    Plotly.animate('plot', {data: [p1], traces: [0], layout: {}},
-        {
+    let x1 = [...player1.x]
+    let y1 = [...player1.y]
+
+    // extend x axis to always be some multiple of 5
+    let rangeX = Math.floor((Math.max(...x1, 15) + 5) / 5) * 5
+
+    let trace1 = {x: [...player1.x], y: [...player1.y]}
+    let trace2 = {x: [...player2.x], y: [...player2.y]}
+
+    let transition = {
         transition: {
-            duration: 500,
+            duration: 300,
             easing: 'cubic-in-out'
         },
         frame: {
-            duration: 500
+            duration: 300
         }
-    })
-    */
-
-    /*
-    let transition = {
-            transition: {
-                duration: 500,
-                easing: 'cubic-in-out'
-            },
-            frame: {
-                duration: 500
-            }
     }
 
-    Plotly.animate('plot', {data: [{x: [0, 1, 2, 3], y: [0, 1, 3, 5, 7]}], traces: [0], layout: {}}, transition).then(function(){
+    Plotly.animate('plot', {data: [trace1, trace2], traces: [0, 1], layout: {xaxis: {range: [0, rangeX]}}}, transition).then(function(){
+        // console.log("finished animating");
+        // Plotly.redraw('plot');
     }) 
-    Plotly.redraw('plot');
-    */
-    
+}
+
+function player1AddScore(){
+    addScore(player1, player2)
+    animate();
 } 
 
 function player2AddScore(){
     addScore(player2, player1);
-    Plotly.redraw('plot');
+    animate();
+    // Plotly.redraw('plot');
 }
 
 function newGame(){
