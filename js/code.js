@@ -59,8 +59,23 @@ function init(){
     // FIXME: overlay should show score and name of player, and maybe some other stats
     let plot = Plotly.newPlot(plotDiv, [{...player1}, {...player2}], layout);
 
+    let timelineLayout = {
+        type: "scatter",
+        showlegend: false,
+        mode: "none",
+        yaxis: {
+            range: [0, 1],
+        }
+    }
+
+    /*
+    let timelineDiv = document.getElementById('timeline');
+    let timelinePlot = Plotly.newPlot(timelineDiv, [], timelineLayout);
+    */
+
     window.onresize = function(){
         Plotly.Plots.resize(plotDiv);
+        // Plotly.Plots.resize(timelinePlot);
     }
 }
 
@@ -80,6 +95,11 @@ function addScore(playerAdd, playerSame){
 function nextRally(player){
     player.x.push(player.x[player.x.length - 1] + 1);
     player.y.push(player.y[player.y.length - 1]);
+}
+
+function removeRally(player){
+    player.x.pop();
+    player.y.pop();
 }
 
 function animate(){
@@ -189,6 +209,29 @@ function sideout(){
     timeline.push(eventSideout())
 }
 
+function undo(){
+    if (timeline.length > 0){
+        let last = timeline.pop()
+        if (last.type == "server-wins"){
+            removeRally(player1)
+            removeRally(player2)
+            if (player1.serving){
+                player1.score -= 1;
+            } else {
+                player2.score -= 1;
+            }
+        } else if (last.type == "sideout"){
+            removeRally(player1)
+            removeRally(player2)
+            player1.serving = !player1.serving;
+            player2.serving = !player2.serving;
+        }
+    }
+
+    animate();
+    updateState();
+}
+
 function newGame(){
     player1.x = [1]
     player1.y = [0]
@@ -198,6 +241,7 @@ function newGame(){
     player2.y = [0]
     player2.score = 0
     player2.serving = false
+    timeline = []
     let plotDiv = document.getElementById('plot');
     layout = initialLayout()
     Plotly.react(plotDiv, {data: [{...player1}, {...player2}], traces: [0, 1], layout: layout});

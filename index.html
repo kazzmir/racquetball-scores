@@ -103,6 +103,13 @@
             font-size: 20px;
         }
 
+        #timeline {
+            clear: both;
+            margin-left: 10px;
+            margin-left: 16%;
+            width: 60%;
+        }
+
         #z {
             clear: both;
             padding-top: 20px;
@@ -144,12 +151,18 @@
         </div>
     </div>
 
+    <div id="timeline">
+    </div>
+
+    <br />
+
     <div id="z">
         <span id="state" class="text center">player1 (serving) 0 - 0 player2. Rally 1</span>
         <br />
         <div id="buttons">
             <button id="serverWins" onclick="serverWins()">Server wins rally</button>
             <button id="sideout" onclick="sideout()">Side out</button>
+            <button id="undo" onclick="undo()">Undo</button>
         </div>
         <div id="morebuttons">
             <button id="newgame" onclick="newGame()">New Game</button>
