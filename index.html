@@ -86,6 +86,14 @@
             font-size: 20px;
         }
 
+        #events {
+            float: right;
+            margin-left: 10px;
+            width: 15%;
+            border: 1px solid #888;
+            box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
+        }
+
         /* the newgame button should be under where the plot is but be in the center of the screen.
          * the button should have a light-bluish tint to it.
          */
@@ -167,6 +175,10 @@
         <div id="morebuttons">
             <button id="newgame" onclick="newGame()">New Game</button>
         </div>
+    </div>
+
+    <div id="events">
+        <span class="text">Timeline</span>
     </div>
 </body>
 </html>

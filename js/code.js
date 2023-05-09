@@ -6,15 +6,17 @@
 let player1 = {name: "player1", x: [1], y: [0], score: 0, serving: true, hovertemplate: "Score %{y}, Rally %{x}"};
 let player2 = {name: "player2", x: [1], y: [0], score: 0, serving: false, hovertemplate: "Score %{y}, Rally %{x}"}
 
-function eventServerWins(){
+function eventServerWins(server){
     return {
-        type: "server-wins"
+        type: "server-wins",
+        server: server,
     }
 }
 
-function eventSideout(){
+function eventSideout(server){
     return {
-        type: "sideout"
+        type: "sideout",
+        server: server
     }
 }
 
@@ -150,6 +152,16 @@ function updateState(){
     let player2Score = document.getElementById('player2Score');
     player2Score.innerHTML = `Score: ${player2.score}`;
 
+    let events = document.getElementById('events');
+    events.innerHTML = "<span class='text'>Timeline</span>";
+    for (let i = 0; i < timeline.length; i++){
+        let use = timeline[i];
+        if (use.type == "server-wins"){
+            events.innerHTML += `<br /><span class='text2'>Rally ${i+1}, Serving: ${use.server}, ${use.server} wins rally</span>`;
+        } else if (use.type == "sideout"){
+            events.innerHTML += `<br /><span class='text2'>Rally ${i+1}, Serving: ${use.server}, sideout</span>`;
+        }
+    }
 }
 
 function player1AddScore(){
@@ -191,22 +203,26 @@ function setPlayer2Name(name){
 
 function serverWins(){
     if (player1.serving){
+        timeline.push(eventServerWins(player1.name))
         player1AddScore()
     } else {
+        timeline.push(eventServerWins(player2.name))
         player2AddScore()
     }
-
-    timeline.push(eventServerWins())
 }
 
 function sideout(){
     nextRally(player1);
     nextRally(player2);
+    var server = player1.name
+    if (player2.serving){
+        server = player2.name
+    }
+    timeline.push(eventSideout(server))
     player1.serving = !player1.serving;
     player2.serving = !player2.serving;
     animate();
     updateState();
-    timeline.push(eventSideout())
 }
 
 function undo(){
