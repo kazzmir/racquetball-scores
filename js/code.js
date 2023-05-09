@@ -6,17 +6,21 @@
 let player1 = {name: "player1", x: [1], y: [0], score: 0, serving: true, hovertemplate: "Score %{y}, Rally %{x}"};
 let player2 = {name: "player2", x: [1], y: [0], score: 0, serving: false, hovertemplate: "Score %{y}, Rally %{x}"}
 
-function eventServerWins(server){
+function eventServerWins(server, score1, score2){
     return {
         type: "server-wins",
         server: server,
+        score1: score1,
+        score2: score2,
     }
 }
 
-function eventSideout(server){
+function eventSideout(server, score1, score2){
     return {
         type: "sideout",
-        server: server
+        server: server,
+        score1: score1,
+        score2: score2,
     }
 }
 
@@ -157,9 +161,9 @@ function updateState(){
     for (let i = 0; i < timeline.length; i++){
         let use = timeline[i];
         if (use.type == "server-wins"){
-            events.innerHTML += `<br /><span class='text2'>Rally ${i+1}, Serving: ${use.server}, ${use.server} wins rally</span>`;
+            events.innerHTML += `<br /><span class='text2'>Rally ${i+1}, Serving: ${use.server}, ${use.server} wins rally. ${use.score1} - ${use.score2}</span>`;
         } else if (use.type == "sideout"){
-            events.innerHTML += `<br /><span class='text2'>Rally ${i+1}, Serving: ${use.server}, sideout</span>`;
+            events.innerHTML += `<br /><span class='text2'>Rally ${i+1}, Serving: ${use.server}, sideout. ${use.score1} - ${use.score2}</span>`;
         }
     }
 }
@@ -203,10 +207,10 @@ function setPlayer2Name(name){
 
 function serverWins(){
     if (player1.serving){
-        timeline.push(eventServerWins(player1.name))
+        timeline.push(eventServerWins(player1.name, player1.score+1, player2.score))
         player1AddScore()
     } else {
-        timeline.push(eventServerWins(player2.name))
+        timeline.push(eventServerWins(player2.name, player1.score, player2.score+1))
         player2AddScore()
     }
 }
@@ -218,7 +222,7 @@ function sideout(){
     if (player2.serving){
         server = player2.name
     }
-    timeline.push(eventSideout(server))
+    timeline.push(eventSideout(server, player1.score, player2.score))
     player1.serving = !player1.serving;
     player2.serving = !player2.serving;
     animate();
