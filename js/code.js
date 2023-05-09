@@ -1,15 +1,8 @@
-let player1 = {};
-let player2 = {};
+let player1 = {name: "player1", x: [], y: []};
+let player2 = {name: "player2", x: [], y: []};
 
-function init(){
-    console.log("init");
-
-    let plotDiv = document.getElementById('plot');
-
-    player1 = {x: [0], y: [0]}
-    player2 = {x: [0], y: [0]}
-
-    layout = {
+function initialLayout(){
+    return {
         title: 'Racquetball game',
         xaxis: {
             title: 'Rally',
@@ -20,6 +13,18 @@ function init(){
             range: [0, 20]
         }
     }
+}
+
+function init(){
+    console.log("init");
+
+    let plotDiv = document.getElementById('plot');
+
+    player1 = {name: "player1", x: [0], y: [0]}
+    player2 = {name: "player2", x: [0], y: [0]}
+
+    // set the name of each trace to the name of the player
+    layout = initialLayout()
 
     let plot = Plotly.newPlot(plotDiv, [{...player1}, {...player2}], layout);
 
@@ -77,10 +82,23 @@ function player2AddScore(){
     // Plotly.redraw('plot');
 }
 
+function setPlayer1Name(name){
+    player1.name = name
+    Plotly.animate('plot', {data: [{...player1}], traces: [0]}, {transition: {duration: 0}});
+}
+
+function setPlayer2Name(name){
+    player2.name = name
+    Plotly.animate('plot', {data: [{...player2}], traces: [1]}, {transition: {duration: 0}});
+}
+
 function newGame(){
     player1.x = [0]
     player1.y = [0]
     player2.x = [0]
     player2.y = [0]
+    let plotDiv = document.getElementById('plot');
+    layout = initialLayout()
+    Plotly.react(plotDiv, {data: [{...player1}, {...player2}], traces: [0, 1], layout: layout});
     Plotly.redraw('plot');
 }
