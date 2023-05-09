@@ -59,6 +59,11 @@
             margin-left: 10px;
         }
 
+        .center {
+            margin-left: 40%;
+            width: 20%;
+        }
+
         #buttons {
             margin-left: 40%;
             margin-top: 10px;
@@ -101,6 +106,7 @@
                 <br />
                 <input id="player1Name" type="text" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
                 <br />
+                <button id="player1Server" onclick="setPlayer1Serving()">Set as server</button>
             </div>
         </div>
         <div id="graph">
@@ -112,15 +118,17 @@
                 <br />
                 <input id="player2Name" type="text" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
                 <br />
+                <button id="player2Server" onclick="setPlayer2Serving()">Set as server</button>
             </div>
         </div>
     </div>
 
     <div id="z">
+        <span id="state" class="text center">Player1 (serving) 0 - 0 Player2</span>
+        <br />
         <div id="buttons">
-            <button id="player1Button" onclick="player1AddScore()">Server wins rally</button>
-            <button id="player1Button" onclick="sideout()">Side out</button>
-            <button id="player2Button" onclick="player2AddScore()">Player2 Add Point</button>
+            <button id="serverWins" onclick="serverWins()()">Server wins rally</button>
+            <button id="sideout" onclick="sideout()">Side out</button>
         </div>
         <div id="morebuttons">
             <button id="newgame" onclick="newGame()">New Game</button>
