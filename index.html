@@ -158,7 +158,7 @@
 <body id="body" onload="init()">
 
     <span class="text">Racquetball Scores</span>
-    <div class="container-fluid h-100 d-flex flex-column">
+    <div class="container-fluid h-100">
         <div id="row1" class="row h-60">
             <div id="player1" class="col">
                 <div class="inner">
@@ -167,9 +167,9 @@
                     <br />
                     <span class="text2">Name</span> <input id="player1Name" type="text" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
                     <br /> <br />
-                    <span class="text3" id="player1State">Serving</span>
+                    <span class="text3" id="player1StateTop">Serving</span>
                     <br />
-                    <button id="player1Server" onclick="setPlayer1Serving()">Set as server</button>
+                    <button type="button" id="player1Server" class="btn btn-secondary" onclick="setPlayer1Serving()">Set as server</button>
                 </div>
             </div>
             <div id="graph" class="col-7 h-100">
@@ -182,32 +182,60 @@
                     <br />
                     <span class="text2">Name</span> <input id="player2Name" type="text" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
                     <br /> <br />
-                    <span class="text3" id="player2State">Receiving</span>
+                    <span class="text3" id="player2StateTop">Receiving</span>
                     <br />
-                    <button id="player2Server" onclick="setPlayer2Serving()">Set as server</button>
+                    <button type="button" id="player2Server" class="btn btn-secondary" onclick="setPlayer2Serving()">Set as server</button>
                 </div>
             </div>
         </div>
 
-        <div id="timeline" class="row h-3">
-        </div>
-
-        <div id="z" class="row flex-grow-1 h-10">
-            <div id="events" class="col">
-                <span class="text">Timeline</span>
+        <div class="row">
+            <div id="events" class="col-4">
+                <span class="text-light fs-3">Timeline</span>
             </div>
 
-            <div class="col-3">
-                <span id="state" class="text">player1 (serving) 0 - 0 player2. Rally 1</span>
+            <div class="col-2">
+                <span id="player1State" class="text-light fs-4">player1 (serving)</span>
                 <br />
-                <div id="buttons">
-                    <button id="serverWins" onclick="serverWins()">Server wins rally</button>
-                    <button id="sideout" onclick="sideout()">Side out</button>
-                    <button id="undo" onclick="undo()">Undo</button>
+                <div id="player1Buttons" class="btn-group-vertical" role="group">
+                    <button type="button" class="btn btn-primary mb-1" onclick="ace(player1)">Winner (ace serve)</button>
+                    <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player1)">Winner (pinch)</button>
+                    <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player1)">Winner (down the line)</button>
+                    <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player1)">Winner (splat)</button>
+                    <button type="button" class="btn btn-danger mb-1" onclick="unforcedError(player1)">Unforced error</button>
+                    <button type="button" class="btn btn-danger mb-1" onclick="skip(player1)">Skip</button>
                 </div>
-                <div id="morebuttons">
-                    <button id="newgame" onclick="newGame()">New Game</button>
+                <span id="player1ScoreMain" class="text-light fs-1">0</span>
+            </div>
+
+            <div class="col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="player2State" class="text-light fs-4">player 2 (receiving)</span>
+                <br />
+                <span id="player2ScoreMain" class="text-light fs-1">0</span>
+                <div id="player2Buttons" class="btn-group-vertical" role="group">
+                    <button type="button" class="btn btn-primary mb-1" onclick="ace(player2)">Winner (ace serve)</button>
+                    <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player2)">Winner (pinch)</button>
+                    <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player2)">Winner (down the line)</button>
+                    <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player2)">Winner (splat)</button>
+                    <button type="button" class="btn btn-danger mb-1" onclick="unforcedError(player2)">Unforced error</button>
+                    <button type="button" class="btn btn-danger mb-1" onclick="skip(player2)">Skip</button>
                 </div>
+            </div>
+
+            <div class="col">
+                <span class="text-light fs-3">Stats</span>
+            </div>
+        </div>
+
+        <div class="row h-3">
+        </div>
+
+        <div id="newgame" class="row">
+            <div class="col">
+            </div>
+            <div class="col-2">
+                <button id="undo" type="button" class="btn btn-info" onclick="undo()">Undo last rally</button>
+                <button id="newgame" type="button" class="btn btn-warning" onclick="newGame()">New Game</button>
             </div>
             <div class="col">
             </div>
