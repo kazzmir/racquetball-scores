@@ -1,7 +1,10 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
     <script src="js/plotly-2.20.0.min.js" charset="utf-8"></script>
     <script src="js/code.js"></script>
+
+    <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
 
     <style>
         /* make the body have a dark grey background */
@@ -14,7 +17,7 @@
         }
 
         /* player1 should be on the left side of the graph */
-        #player1{
+        #x_player1{
             float: left;
             width: 15%;
             height: 60%;
@@ -27,7 +30,7 @@
         /* graph div should be smaller than the body
          * and have a thin white border with a drop shadow
          */
-        #graph {
+        #x_graph {
             float: left;
             margin-top: 20px;
             margin-left: 10px;
@@ -37,7 +40,7 @@
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
         }
 
-        #player2 {
+        #x_player2 {
             float: left;
             width: 15%;
             height: 60%;
@@ -47,7 +50,7 @@
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
         }
 
-        #plot {
+        #x_plot {
             margin: 5px;
             height: 98%;
         }
@@ -78,7 +81,7 @@
             width: 20%;
         }
 
-        #buttons {
+        #x_buttons {
             margin-left: 42%;
             margin-top: 10px;
             width: 20%;
@@ -86,7 +89,7 @@
             font-size: 20px;
         }
 
-        #events {
+        #x_events {
             float: right;
             margin-left: 10px;
             width: 20%;
@@ -97,13 +100,13 @@
         /* the newgame button should be under where the plot is but be in the center of the screen.
          * the button should have a light-bluish tint to it.
          */
-        #newgame {
+        #x_newgame {
             font-size: 20px;
             background-color: #00bfff;
         }
 
         /* morebuttons should be under buttons */
-        #morebuttons {
+        #x_morebuttons {
             margin-left: 45%;
             margin-top: 10px;
             width: 10%;
@@ -111,14 +114,14 @@
             font-size: 20px;
         }
 
-        #timeline {
+        #x_timeline {
             clear: both;
             margin-left: 10px;
             margin-left: 16%;
             width: 60%;
         }
 
-        #z {
+        #x_z {
             clear: both;
             padding-top: 20px;
         }
@@ -129,56 +132,58 @@
 <body id="body" onload="init()">
 
     <span class="text">Racquetball Scores</span>
-    <div>
-        <div id="player1">
-            <div class="inner">
-                <span class="text">Player 1</span>
-                <span class="text" id="player1Score">Score: 0</span>
-                <br />
-                <span class="text2">Name</span> <input id="player1Name" type="text" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
-                <br /> <br />
-                <span class="text3" id="player1State">Serving</span>
-                <br />
-                <button id="player1Server" onclick="setPlayer1Serving()">Set as server</button>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="player1" class="col">
+                <div class="inner">
+                    <span class="text">Player 1</span>
+                    <span class="text" id="player1Score">Score: 0</span>
+                    <br />
+                    <span class="text2">Name</span> <input id="player1Name" type="text" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
+                    <br /> <br />
+                    <span class="text3" id="player1State">Serving</span>
+                    <br />
+                    <button id="player1Server" onclick="setPlayer1Serving()">Set as server</button>
+                </div>
+            </div>
+            <div id="graph" class="col">
+                <div id="plot"></div>
+            </div>
+            <div id="player2" class="col">
+                <div class="inner">
+                    <span class="text">Player 2</span>
+                    <span class="text" id="player2Score">Score: 0</span>
+                    <br />
+                    <span class="text2">Name</span> <input id="player2Name" type="text" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
+                    <br /> <br />
+                    <span class="text3" id="player2State">Receiving</span>
+                    <br />
+                    <button id="player2Server" onclick="setPlayer2Serving()">Set as server</button>
+                </div>
             </div>
         </div>
-        <div id="graph">
-            <div id="plot"></div>
+
+        <div id="timeline" class="row">
         </div>
-        <div id="player2">
-            <div class="inner">
-                <span class="text">Player 2</span>
-                <span class="text" id="player2Score">Score: 0</span>
-                <br />
-                <span class="text2">Name</span> <input id="player2Name" type="text" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
-                <br /> <br />
-                <span class="text3" id="player2State">Receiving</span>
-                <br />
-                <button id="player2Server" onclick="setPlayer2Serving()">Set as server</button>
+
+        <div id="z" class="row">
+            <span id="state" class="text">player1 (serving) 0 - 0 player2. Rally 1</span>
+            <br />
+            <div id="buttons">
+                <button id="serverWins" onclick="serverWins()">Server wins rally</button>
+                <button id="sideout" onclick="sideout()">Side out</button>
+                <button id="undo" onclick="undo()">Undo</button>
+            </div>
+            <div id="morebuttons">
+                <button id="newgame" onclick="newGame()">New Game</button>
             </div>
         </div>
-    </div>
 
-    <div id="timeline">
-    </div>
-
-    <br />
-
-    <div id="z">
-        <span id="state" class="text center">player1 (serving) 0 - 0 player2. Rally 1</span>
-        <br />
-        <div id="buttons">
-            <button id="serverWins" onclick="serverWins()">Server wins rally</button>
-            <button id="sideout" onclick="sideout()">Side out</button>
-            <button id="undo" onclick="undo()">Undo</button>
-        </div>
-        <div id="morebuttons">
-            <button id="newgame" onclick="newGame()">New Game</button>
+        <div id="events">
+            <span class="text">Timeline</span>
         </div>
     </div>
 
-    <div id="events">
-        <span class="text">Timeline</span>
-    </div>
+    <script src="bootstrap/bootstrap.bundle.min.js"></script>
 </body>
 </html>
