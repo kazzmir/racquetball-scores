@@ -16,13 +16,19 @@
             padding: 5px;
         }
 
+        #row1 {
+        }
+
         /* player1 should be on the left side of the graph */
-        #x_player1{
+        #player1{
+            /*
             float: left;
             width: 15%;
             height: 60%;
             margin-top: 20px;
             margin-left: 10px;
+            */
+            margin-left: 5px;
             border: 1px solid #888;
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
         }
@@ -30,7 +36,8 @@
         /* graph div should be smaller than the body
          * and have a thin white border with a drop shadow
          */
-        #x_graph {
+        #graph {
+            /*
             float: left;
             margin-top: 20px;
             margin-left: 10px;
@@ -38,14 +45,17 @@
             height: 60%;
             border: 1px solid #888;
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
+            */
         }
 
-        #x_player2 {
+        #player2 {
+            /*
             float: left;
             width: 15%;
             height: 60%;
             margin-top: 20px;
-            margin-left: 10px;
+            */
+            margin-right: 5px;
             border: 1px solid #888;
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
         }
@@ -126,14 +136,30 @@
             padding-top: 20px;
         }
 
+        .h-10 {
+            height: 10%;
+        }
+
+        .h-60 {
+            height: 60%;
+        }
+
+        .h-3 {
+            height: 3%;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
     </style>
 
 </head>
 <body id="body" onload="init()">
 
     <span class="text">Racquetball Scores</span>
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container-fluid h-100 d-flex flex-column">
+        <div id="row1" class="row h-60">
             <div id="player1" class="col">
                 <div class="inner">
                     <span class="text">Player 1</span>
@@ -146,8 +172,8 @@
                     <button id="player1Server" onclick="setPlayer1Serving()">Set as server</button>
                 </div>
             </div>
-            <div id="graph" class="col">
-                <div id="plot"></div>
+            <div id="graph" class="col-7 h-100">
+                <div id="plot" class="h-100"></div>
             </div>
             <div id="player2" class="col">
                 <div class="inner">
@@ -163,24 +189,28 @@
             </div>
         </div>
 
-        <div id="timeline" class="row">
+        <div id="timeline" class="row h-3">
         </div>
 
-        <div id="z" class="row">
-            <span id="state" class="text">player1 (serving) 0 - 0 player2. Rally 1</span>
-            <br />
-            <div id="buttons">
-                <button id="serverWins" onclick="serverWins()">Server wins rally</button>
-                <button id="sideout" onclick="sideout()">Side out</button>
-                <button id="undo" onclick="undo()">Undo</button>
+        <div id="z" class="row flex-grow-1 h-10">
+            <div id="events" class="col">
+                <span class="text">Timeline</span>
             </div>
-            <div id="morebuttons">
-                <button id="newgame" onclick="newGame()">New Game</button>
-            </div>
-        </div>
 
-        <div id="events">
-            <span class="text">Timeline</span>
+            <div class="col-3">
+                <span id="state" class="text">player1 (serving) 0 - 0 player2. Rally 1</span>
+                <br />
+                <div id="buttons">
+                    <button id="serverWins" onclick="serverWins()">Server wins rally</button>
+                    <button id="sideout" onclick="sideout()">Side out</button>
+                    <button id="undo" onclick="undo()">Undo</button>
+                </div>
+                <div id="morebuttons">
+                    <button id="newgame" onclick="newGame()">New Game</button>
+                </div>
+            </div>
+            <div class="col">
+            </div>
         </div>
     </div>
 
