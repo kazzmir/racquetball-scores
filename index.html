@@ -7,9 +7,15 @@
     <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
 
     <style>
+
         /* make the body have a dark grey background */
-        #body {
+        .normal {
             background-color: #333;
+        }
+
+        .lprt {
+            /* light blue color */
+            background-color: #00bfff;
         }
 
         .inner{
@@ -155,10 +161,18 @@
     </style>
 
 </head>
-<body id="body" onload="init()">
+<body id="body" class="normal" onload="init()">
 
     <span class="text">Racquetball Scores</span>
     <div class="container-fluid h-100">
+        <div class="row">
+            <div class="col-1">
+                <button type="button" class="btn btn-secondary" onclick="normalStyle()">Normal</button>
+            </div>
+            <div class="col-1">
+                <button type="button" class="btn btn-secondary" onclick="lprtStyle()">LPRT</button>
+            </div>
+        </div>
         <div id="row1" class="row h-60">
             <div id="player1" class="col">
                 <div class="inner">

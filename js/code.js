@@ -465,3 +465,15 @@ function newGame(){
     Plotly.redraw('plot');
     updateState()
 }
+
+function normalStyle(){
+    let list = document.body.classList
+    list.remove('lprt')
+    list.add('normal')
+}
+
+function lprtStyle(){
+    let list = document.body.classList
+    list.add('lprt')
+    list.remove('normal')
+}
