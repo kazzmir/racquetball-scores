@@ -67,7 +67,7 @@ function init(){
     */
 
     // set the name of each trace to the name of the player
-    layout = initialLayout()
+    let layout = initialLayout()
 
     // FIXME: overlay should show score and name of player, and maybe some other stats
     let plot = Plotly.newPlot(plotDiv, [{...player1}, {...player2}], layout);
@@ -143,6 +143,49 @@ function animate(){
     }) 
 }
 
+function updateTimeline(){
+    let events = elem('events');
+    events.innerHTML = "<span class='text-light fs-3'>Timeline</span>";
+    for (let i = 0; i < timeline.length; i++){
+        let use = timeline[i];
+        if (use.type == "server-wins"){
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.server} wins rally with ${use.kind}. Point for ${use.server}. ${use.score1} - ${use.score2}</span>`;
+        } else if (use.type == "loser-wins"){
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.player} wins rally with ${use.kind}. Sideout. ${use.score1} - ${use.score2}</span>`;
+        }
+    }
+}
+
+function computeStats(player){
+    let out = {
+        aces: 0,
+        errors: 0,
+    }
+
+    for (let i = 0; i < timeline.length; i++){
+        let use = timeline[i];
+        if (use.type == 'server-wins' && use.server == player.name && use.kind == 'ace'){
+            out.aces += 1
+        } else if (use.type == 'loser-wins' && use.player == player.name && use.kind == 'error'){
+            out.errors += 1
+        }
+    }
+
+    return out
+
+}
+
+function updateStats(){
+    let stats = elem('stats');
+
+    let player1Stats = computeStats(player1);
+    let player2Stats = computeStats(player2);
+
+    stats.innerHTML =  `<span class='text-light fs-6'>${player1.name} aces: ${player1Stats.aces} errors: ${player1Stats.errors}</span>`;
+    stats.innerHTML += `&nbsp;&nbsp`;
+    stats.innerHTML += `<span class='text-light fs-6'>${player2.name} aces: ${player2Stats.aces} errors: ${player2Stats.errors}</span>`;
+}
+
 function updateState(){
     let player1State = elem('player1State');
     let player1Score = elem('player1ScoreMain');
@@ -167,16 +210,8 @@ function updateState(){
     player1Score.innerHTML = `${player1.score}`;
     player2Score.innerHTML = `${player2.score}`;
 
-    let events = elem('events');
-    events.innerHTML = "<span class='text-light fs-3'>Timeline</span>";
-    for (let i = 0; i < timeline.length; i++){
-        let use = timeline[i];
-        if (use.type == "server-wins"){
-            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.server} wins rally with ${use.kind}. Point for ${use.server}. ${use.score1} - ${use.score2}</span>`;
-        } else if (use.type == "loser-wins"){
-            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.player} wins rally with ${use.kind}. Sideout. ${use.score1} - ${use.score2}</span>`;
-        }
-    }
+    updateTimeline();
+    updateStats();
 }
 
 function player1AddScore(){
@@ -207,13 +242,15 @@ function setPlayer2Serving(){
 function setPlayer1Name(name){
     player1.name = name
     updateState();
-    Plotly.animate('plot', {data: [{...player1}], traces: [0]}, {transition: {duration: 0}});
+    animate();
+    // Plotly.animate('plot', {data: [{...player1}], traces: [0]}, {transition: {duration: 0}});
 }
 
 function setPlayer2Name(name){
     player2.name = name
     updateState();
-    Plotly.animate('plot', {data: [{...player2}], traces: [1]}, {transition: {duration: 0}});
+    animate();
+    // Plotly.animate('plot', {data: [{...player2}], traces: [1]}, {transition: {duration: 0}});
 }
 
 /* the rally ended because of the winning action of 'player' */
@@ -344,7 +381,7 @@ function newGame(){
     player2.serving = false
     timeline = []
     let plotDiv = document.getElementById('plot');
-    layout = initialLayout()
+    let layout = initialLayout()
     Plotly.react(plotDiv, {data: [{...player1}, {...player2}], traces: [0, 1], layout: layout});
     Plotly.redraw('plot');
     updateState()
