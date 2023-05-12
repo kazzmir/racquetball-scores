@@ -206,54 +206,92 @@
                 <span class="text-light fs-3">Timeline</span>
             </div>
 
-            <div class="col-2">
-                <span id="player1State" class="text-light fs-4">player1 (serving)</span>
-                <br />
-                <div id="player1Buttons" class="btn-group-vertical" role="group">
-                    <button type="button" class="btn btn-primary mb-1" onclick="ace(player1)">Winner (ace serve)</button>
-                    <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player1)">Winner (pinch)</button>
-                    <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player1)">Winner (down the line)</button>
-                    <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player1)">Winner (splat)</button>
-                    <button type="button" class="btn btn-danger mb-1" onclick="unforcedError(player1)">Unforced error</button>
-                    <button type="button" class="btn btn-danger mb-1" onclick="skip(player1)">Skip</button>
-                </div>
-                <span id="player1ScoreMain" class="text-light fs-1">0</span>
-            </div>
+            <div class="col-4">
 
-            <div class="col-2">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="player2State" class="text-light fs-4">player 2 (receiving)</span>
-                <br />
-                <span id="player2ScoreMain" class="text-light fs-1">0</span>
-                <div id="player2Buttons" class="btn-group-vertical" role="group">
-                    <button type="button" class="btn btn-primary mb-1" onclick="ace(player2)">Winner (ace serve)</button>
-                    <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player2)">Winner (pinch)</button>
-                    <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player2)">Winner (down the line)</button>
-                    <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player2)">Winner (splat)</button>
-                    <button type="button" class="btn btn-danger mb-1" onclick="unforcedError(player2)">Unforced error</button>
-                    <button type="button" class="btn btn-danger mb-1" onclick="skip(player2)">Skip</button>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <span id="player1State" class="text-light fs-4">player1 (serving)</span>
+                            <br />
+                            <div id="player1Buttons" class="btn-group-vertical" role="group">
+                                <button type="button" class="btn btn-primary mb-1" onclick="ace(player1)">Winner (ace serve)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player1)">Winner (pinch)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player1)">Winner (down the line)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player1)">Winner (splat)</button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="unforcedError(player1)">Unforced error</button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="skip(player1)">Skip</button>
+                            </div>
+                            <span id="player1ScoreMain" class="text-light fs-1">0</span>
+                        </div>
+
+                        <div class="col">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="player2State" class="text-light fs-4">player 2 (receiving)</span>
+                            <br />
+                            <span id="player2ScoreMain" class="text-light fs-1">0</span>
+                            <div id="player2Buttons" class="btn-group-vertical" role="group">
+                                <button type="button" class="btn btn-primary mb-1" onclick="ace(player2)">Winner (ace serve)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player2)">Winner (pinch)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player2)">Winner (down the line)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player2)">Winner (splat)</button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="unforcedError(player2)">Unforced error</button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="skip(player2)">Skip</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="newgame" class="row">
+                        <div class="col">
+                        </div>
+                        <div class="col-6">
+                            <button id="undo" type="button" class="btn btn-info mb-1" onclick="undo()">Undo last rally</button>
+                            <button id="newgame" type="button" class="btn btn-warning" onclick="newGame()">New Game</button>
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
             <div class="col">
                 <span class="text-light fs-3">Stats</span>
                 <br />
-                <div id="stats">
-                </div>
+                <table class="table table-primary">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th id="tablePlayer1" scope="col">player1</th>
+                            <th id="tablePlayer2" scope="col">player2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Serves</th>
+                            <td id="statsServesPlayer1">0</td>
+                            <td id="statsServesPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Aces</th>
+                            <td id="statsAcePlayer1">0</td>
+                            <td id="statsAcePlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Errors</th>
+                            <td id="statsErrorsPlayer1">0</td>
+                            <td id="statsErrorsPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Longest run</th>
+                            <td id="statsLongestRunPlayer1">0</td>
+                            <td id="statsLongestRunPlayer2">0</td>
+                        </tr>
+
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <div class="row h-3">
-        </div>
-
-        <div id="newgame" class="row">
-            <div class="col">
-            </div>
-            <div class="col-2">
-                <button id="undo" type="button" class="btn btn-info" onclick="undo()">Undo last rally</button>
-                <button id="newgame" type="button" class="btn btn-warning" onclick="newGame()">New Game</button>
-            </div>
-            <div class="col">
-            </div>
         </div>
     </div>
 

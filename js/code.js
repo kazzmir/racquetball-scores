@@ -197,30 +197,50 @@ function computeStats(player){
     let out = {
         aces: 0,
         errors: 0,
+        runs: 0,
+        serves: 0,
     }
+
+    var currentRun = 0;
 
     for (let i = 0; i < timeline.length; i++){
         let use = timeline[i];
+        if (use.server === player.name){
+            out.serves += 1
+        }
+
         if (use.kind == 'ace' && use.lastHitPlayer === player.name){
             out.aces += 1
         } else if (use.lastHitPlayer === player.name && isError(use.kind)){
             out.errors += 1
+            out.runs = Math.max(out.runs, currentRun)
+            currentRun = 0;
+        }
+
+        if (use.lastHitPlayer == player.name && !isError(use.kind)){
+            currentRun += 1;
         }
     }
+
+    out.runs = Math.max(out.runs, currentRun)
 
     return out
 
 }
 
 function updateStats(){
-    let stats = elem('stats');
-
     let player1Stats = computeStats(player1);
     let player2Stats = computeStats(player2);
 
-    stats.innerHTML =  `<span class='text-light fs-6'>${player1.name} aces: ${player1Stats.aces} errors: ${player1Stats.errors}</span>`;
-    stats.innerHTML += `&nbsp;&nbsp`;
-    stats.innerHTML += `<span class='text-light fs-6'>${player2.name} aces: ${player2Stats.aces} errors: ${player2Stats.errors}</span>`;
+    elem("statsAcePlayer1").innerHTML = player1Stats.aces
+    elem("statsServesPlayer1").innerHTML = player1Stats.serves
+    elem("statsErrorsPlayer1").innerHTML = player1Stats.errors
+    elem("statsLongestRunPlayer1").innerHTML = player1Stats.runs
+
+    elem("statsAcePlayer2").innerHTML = player2Stats.aces
+    elem("statsServesPlayer2").innerHTML = player2Stats.serves
+    elem("statsErrorsPlayer2").innerHTML = player2Stats.errors
+    elem("statsLongestRunPlayer2").innerHTML = player2Stats.runs
 }
 
 function updateState(){
