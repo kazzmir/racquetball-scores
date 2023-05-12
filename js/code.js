@@ -30,6 +30,16 @@ function makeRallyEvent(server, winningPlayer, lastHitPlayer, kind, score1, scor
     }
 }
 
+function makeTimeoutEvent(server, timeoutPlayer, score1, score2){
+    return {
+        type: "timeout",
+        server: server,
+        timeoutPlayer: timeoutPlayer,
+        score1: score1,
+        score2: score2
+    }
+}
+
 function makeReplayEvent(server, score1, score2){
     return {
         type: "replay",
@@ -185,19 +195,28 @@ function animate(){
 function updateTimeline(){
     let events = elem('events');
     events.innerHTML = "<span class='text-light fs-3'>Timeline</span>";
+    var rallyNumber = 1;
     for (let i = 0; i < timeline.length; i++){
         let use = timeline[i];
 
         if (use.type == "replay"){
-            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. Replay. ${use.score1} - ${use.score2}</span>`;
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${rallyNumber}, Server: ${use.server}. Replay. ${use.score1} - ${use.score2}</span>`;
+            rallyNumber += 1
+            continue
+        }
+
+        if (use.type == "timeout"){
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${rallyNumber}, Server: ${use.server}. Timeout by ${use.timeoutPlayer}. ${use.score1} - ${use.score2}</span>`;
             continue
         }
 
         if (isPoint(use)){
-            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.winningPlayer} wins rally with ${use.kind}. Point for ${use.server}. ${use.score1} - ${use.score2}</span>`;
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${rallyNumber}, Server: ${use.server}. ${use.winningPlayer} wins rally with ${use.kind}. Point for ${use.server}. ${use.score1} - ${use.score2}</span>`;
         } else {
-            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.winningPlayer} wins rally with ${use.kind}. Sideout. ${use.score1} - ${use.score2}</span>`;
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${rallyNumber}, Server: ${use.server}. ${use.winningPlayer} wins rally with ${use.kind}. Sideout. ${use.score1} - ${use.score2}</span>`;
         }
+
+        rallyNumber += 1
 
         /*
         if (use.type == "server-wins"){
@@ -221,6 +240,10 @@ function computeStats(player){
 
     for (let i = 0; i < timeline.length; i++){
         let use = timeline[i];
+
+        if (use.type == "timeout"){
+            continue
+        }
 
         if (use.server === player.name){
             out.serves += 1
@@ -439,6 +462,11 @@ function getServer(){
     }
 
     return player2.name
+}
+
+function timeout(player){
+    timeline.push(makeTimeoutEvent(getServer(), player.name, player1.score, player2.score))
+    updateState();
 }
 
 function replay(){
