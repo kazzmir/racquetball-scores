@@ -577,9 +577,6 @@ function getLastRally(){
 function fault(player){
     if (timeline.length > 0){
         let lastRally = getLastRally()
-        if (lastRally !== null){
-            console.log(`last rally: server=${lastRally.server} type=${lastRally.type} player=${player.name}`)
-        }
         if (lastRally !== null && lastRally.server == player.name && lastRally.type === 'fault'){
             loseRally(player, 'double fault')
             animate();
