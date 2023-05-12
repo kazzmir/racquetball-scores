@@ -30,6 +30,15 @@ function makeRallyEvent(server, winningPlayer, lastHitPlayer, kind, score1, scor
     }
 }
 
+function makeReplayEvent(server, score1, score2){
+    return {
+        type: "replay",
+        server: server,
+        score1: score1,
+        score2: score2
+    }
+}
+
 function isError(kind){
     return kind === 'skip' || kind === 'unforced error' || kind == 'avoidable'
 }
@@ -146,7 +155,7 @@ function removeRally(player){
 }
 
 function animate(){
-    let plotDiv = document.getElementById('plot');
+    let plotDiv = elem('plot');
 
     let x1 = [...player1.x]
     let y1 = [...player1.y]
@@ -179,6 +188,11 @@ function updateTimeline(){
     for (let i = 0; i < timeline.length; i++){
         let use = timeline[i];
 
+        if (use.type == "replay"){
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. Replay. ${use.score1} - ${use.score2}</span>`;
+            continue
+        }
+
         if (isPoint(use)){
             events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.winningPlayer} wins rally with ${use.kind}. Point for ${use.server}. ${use.score1} - ${use.score2}</span>`;
         } else {
@@ -207,8 +221,13 @@ function computeStats(player){
 
     for (let i = 0; i < timeline.length; i++){
         let use = timeline[i];
+
         if (use.server === player.name){
             out.serves += 1
+        }
+
+        if (use.type == "replay"){
+            continue
         }
 
         if (use.kind == 'ace' && use.lastHitPlayer === player.name){
@@ -410,6 +429,23 @@ function unforcedError(player){
 
 function skip(player){
     loseRally(player, 'skip')
+    animate();
+    updateState();
+}
+
+function getServer(){
+    if (player1.serving){
+        return player1.name
+    }
+
+    return player2.name
+}
+
+function replay(){
+    console.log('replay')
+    nextRally(player1);
+    nextRally(player2);
+    timeline.push(makeReplayEvent(getServer(), player1.score, player2.score))
     animate();
     updateState();
 }
