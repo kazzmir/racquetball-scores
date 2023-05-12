@@ -272,6 +272,29 @@ function updateTimeline(){
     }
 }
 
+/* remove all timeout events */
+function normalizeTimeline(timeline){
+    let out = []
+    for (let i = 0; i < timeline.length; i++){
+        if (timeline[i].type !== "timeout"){
+            out.push(timeline[i]);
+        }
+    }
+    return out
+}
+
+/* remove all double fault events */
+function removeDoubleFaults(timeline){
+    let out = []
+    for (let i = 0; i < timeline.length; i++){
+        if (timeline[i].type !== "double fault"){
+            out.push(timeline[i]);
+        }
+    }
+    return out
+}
+
+
 /* iterate through the timeline and compute statistics based on the events that occured */
 function computeStats(player){
     let out = {
@@ -280,12 +303,24 @@ function computeStats(player){
         runs: 0,
         serves: 0,
         faults: 0,
+        firstServe: 0,
+        firstServeTries: 0,
     }
 
     var currentRun = 0;
 
-    for (let i = 0; i < timeline.length; i++){
-        let use = timeline[i];
+    let normalized = normalizeTimeline(timeline)
+
+    let noDoubleFaults = removeDoubleFaults(normalized)
+
+    for (let i = 0; i < noDoubleFaults.length; i++){
+        if (noDoubleFaults[i].server == player.name){
+            out.firstServeTries += 1
+        }
+    }
+
+    for (let i = 0; i < normalized.length; i++){
+        let use = normalized[i];
 
         if (use.type == "timeout"){
             continue
@@ -296,14 +331,19 @@ function computeStats(player){
             out.serves += 1
         }
 
-        if (use.type == "replay"){
+        if (use.server == player.name && (use.type === "fault" || isDoubleFault(use))){
+            out.faults += 1
             continue
         }
 
-        console.log(`event ${i} player=${player.name} server=${use.server} type=${use.type}`)
+        /* its a first serve if this is the first rally that this player is serving.
+         */
+        // if (use.server == player.name && (i == 0 || (i > 0 && (normalized[i-1].server !== player.name || normalized[i-1].type !== "fault")))){
+        if (use.server == player.name){
+            out.firstServe += 1
+        }
 
-        if (use.server == player.name && (use.type === "fault" || isDoubleFault(use))){
-            out.faults += 1
+        if (use.type == "replay"){
             continue
         }
 
@@ -332,18 +372,25 @@ function computeStats(player){
 
 }
 
+function firstServeStats(stats){
+    let percentage = stats.firstServeTries > 0 ? (stats.firstServe / stats.firstServeTries * 100.0) : 0
+    return `${stats.firstServe} ${Math.round(percentage)}%`
+}
+
 function updateStats(){
     let player1Stats = computeStats(player1);
     let player2Stats = computeStats(player2);
 
     elem("statsAcePlayer1").innerHTML = player1Stats.aces
     elem("statsServesPlayer1").innerHTML = player1Stats.serves
+    elem("statsFirstServesPlayer1").innerHTML = firstServeStats(player1Stats)
     elem("statsFaultsPlayer1").innerHTML = player1Stats.faults
     elem("statsErrorsPlayer1").innerHTML = player1Stats.errors
     elem("statsLongestRunPlayer1").innerHTML = player1Stats.runs
 
     elem("statsAcePlayer2").innerHTML = player2Stats.aces
     elem("statsServesPlayer2").innerHTML = player2Stats.serves
+    elem("statsFirstServesPlayer2").innerHTML = firstServeStats(player2Stats)
     elem("statsFaultsPlayer2").innerHTML = player2Stats.faults
     elem("statsErrorsPlayer2").innerHTML = player2Stats.errors
     elem("statsLongestRunPlayer2").innerHTML = player2Stats.runs
