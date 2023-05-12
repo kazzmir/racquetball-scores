@@ -57,6 +57,27 @@ function isPoint(event_){
     return event_.server == event_.winningPlayer
 }
 
+function isPointFor(event_, player){
+    if (isSideout(event_)){
+        return false
+    }
+
+    return event_.server == player
+}
+
+/* its a sideout if the player that received won the rally */
+function isSideout(event_){
+    /* either the player just served and made an error */
+    if (event_.lastHitPlayer == event_.server && isError(event_.kind)){
+        return true
+    }
+    /* or the player didn't receive and didn't make an error */
+    if (event_.lastHitPlayer != event_.server && !isError(event_.kind)){
+        return true
+    }
+    return false
+}
+
 function eventServerWins(server, kind, score1, score2){
     return {
         type: "server-wins",
@@ -207,6 +228,7 @@ function updateTimeline(){
 
         if (use.type == "timeout"){
             events.innerHTML += `<br /><span class="text-light fs-6">Rally ${rallyNumber}, Server: ${use.server}. Timeout by ${use.timeoutPlayer}. ${use.score1} - ${use.score2}</span>`;
+            // no rally for a timeout
             continue
         }
 
@@ -217,17 +239,10 @@ function updateTimeline(){
         }
 
         rallyNumber += 1
-
-        /*
-        if (use.type == "server-wins"){
-            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.server} wins rally with ${use.kind}. Point for ${use.server}. ${use.score1} - ${use.score2}</span>`;
-        } else if (use.type == "loser-wins"){
-            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.player} wins rally with ${use.kind}. Sideout. ${use.score1} - ${use.score2}</span>`;
-        }
-        */
     }
 }
 
+/* iterate through the timeline and compute statistics based on the events that occured */
 function computeStats(player){
     let out = {
         aces: 0,
@@ -245,6 +260,7 @@ function computeStats(player){
             continue
         }
 
+        /* a replay counts as the player having served */
         if (use.server === player.name){
             out.serves += 1
         }
@@ -253,19 +269,25 @@ function computeStats(player){
             continue
         }
 
-        if (use.kind == 'ace' && use.lastHitPlayer === player.name){
-            out.aces += 1
-        } else if (use.lastHitPlayer === player.name && isError(use.kind)){
-            out.errors += 1
+        if (use.lastHitPlayer == player.name){
+            if (use.kind == 'ace'){
+                out.aces += 1
+            } else if (!isError(use)){
+                out.errors += 1
+            }
+        }
+
+        /* its a run of points if its a point for the player */
+        if (isPointFor(use, player.name)){
+            currentRun += 1;
+        } else {
+            /* otherwise the run is over */
             out.runs = Math.max(out.runs, currentRun)
             currentRun = 0;
         }
-
-        if (use.lastHitPlayer == player.name && !isError(use.kind)){
-            currentRun += 1;
-        }
     }
 
+    /* compute the last run */
     out.runs = Math.max(out.runs, currentRun)
 
     return out
