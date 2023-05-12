@@ -154,8 +154,8 @@ function animate(){
     // extend x axis to always be some multiple of 5
     let rangeX = Math.floor((Math.max(...x1, 15) + 5) / 5) * 5
 
-    let trace1 = {x: [...player1.x], y: [...player1.y]}
-    let trace2 = {x: [...player2.x], y: [...player2.y]}
+    let trace1 = {x: [...player1.x], y: [...player1.y], name: player1.name}
+    let trace2 = {x: [...player2.x], y: [...player2.y], name: player2.name}
 
     let transition = {
         transition: {
