@@ -5,3 +5,8 @@ Online demo: https://kazzmir.github.io/racquetball-scores/
 Uses plotly https://plotly.com/graphing-libraries/
 
 html + javascript
+
+Linter:
+```
+$ npm run lint
+```
