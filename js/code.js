@@ -31,7 +31,7 @@ function makeRallyEvent(server, winningPlayer, lastHitPlayer, kind, score1, scor
 }
 
 function isError(kind){
-    return kind === 'skip' || kind === 'unforced error'
+    return kind === 'skip' || kind === 'unforced error' || kind == 'avoidable'
 }
 
 function isPoint(event_){
@@ -410,6 +410,12 @@ function unforcedError(player){
 
 function skip(player){
     loseRally(player, 'skip')
+    animate();
+    updateState();
+}
+
+function avoidable(player){
+    loseRally(player, 'avoidable')
     animate();
     updateState();
 }
