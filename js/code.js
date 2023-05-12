@@ -30,6 +30,24 @@ function makeRallyEvent(server, winningPlayer, lastHitPlayer, kind, score1, scor
     }
 }
 
+function makeFaultEvent(server, score1, score2){
+    return {
+        type: "fault",
+        server: server,
+        score1: score1,
+        score2: score2
+    }
+}
+
+function makeDoubleFaultEvent(server, score1, score2){
+    return {
+        type: "fault",
+        server: server,
+        score1: score1,
+        score2: score2
+    }
+}
+
 function makeTimeoutEvent(server, timeoutPlayer, score1, score2){
     return {
         type: "timeout",
@@ -209,6 +227,10 @@ function animate(){
     }) 
 }
 
+function isDoubleFault(event_){
+    return event_.type == "rally" && event_.kind == "double fault"
+}
+
 function updateTimeline(){
     let events = elem('events');
     events.innerHTML = "<span class='text-light fs-3'>Timeline</span>";
@@ -225,6 +247,18 @@ function updateTimeline(){
         if (use.type == "timeout"){
             events.innerHTML += `<br /><span class="text-light fs-6">Rally ${rallyNumber}, Server: ${use.server}. Timeout by ${use.timeoutPlayer}. ${use.score1} - ${use.score2}</span>`;
             // no rally for a timeout
+            continue
+        }
+
+        if (isDoubleFault(use)){
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${rallyNumber}, Server: ${use.server}. Double fault serve. Sideout. ${use.score1} - ${use.score2}</span>`;
+            rallyNumber += 1
+            continue
+        }
+
+        if (use.type == "fault"){
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${rallyNumber}, Server: ${use.server}. Fault serve. ${use.score1} - ${use.score2}</span>`;
+            rallyNumber += 1
             continue
         }
 
@@ -245,6 +279,7 @@ function computeStats(player){
         errors: 0,
         runs: 0,
         serves: 0,
+        faults: 0,
     }
 
     var currentRun = 0;
@@ -262,6 +297,13 @@ function computeStats(player){
         }
 
         if (use.type == "replay"){
+            continue
+        }
+
+        console.log(`event ${i} player=${player.name} server=${use.server} type=${use.type}`)
+
+        if (use.server == player.name && (use.type === "fault" || isDoubleFault(use))){
+            out.faults += 1
             continue
         }
 
@@ -296,11 +338,13 @@ function updateStats(){
 
     elem("statsAcePlayer1").innerHTML = player1Stats.aces
     elem("statsServesPlayer1").innerHTML = player1Stats.serves
+    elem("statsFaultsPlayer1").innerHTML = player1Stats.faults
     elem("statsErrorsPlayer1").innerHTML = player1Stats.errors
     elem("statsLongestRunPlayer1").innerHTML = player1Stats.runs
 
     elem("statsAcePlayer2").innerHTML = player2Stats.aces
     elem("statsServesPlayer2").innerHTML = player2Stats.serves
+    elem("statsFaultsPlayer2").innerHTML = player2Stats.faults
     elem("statsErrorsPlayer2").innerHTML = player2Stats.errors
     elem("statsLongestRunPlayer2").innerHTML = player2Stats.runs
 }
@@ -341,7 +385,7 @@ function updateState(){
         elem('player2Ace').classList.remove('disabled')
         elem('player2Fault').classList.remove('disabled')
         elem('player1Ace').classList.add('disabled')
-        elem('player1Ace').classList.add('disabled')
+        elem('player1Fault').classList.add('disabled')
     }
 
     updateTimeline();
@@ -469,6 +513,35 @@ function splatWinner(player){
 function unforcedError(player){
     loseRally(player, 'unforced error')
     animate();
+    updateState();
+}
+
+function getLastRally(){
+    for (var i = timeline.length - 1; i >= 0; i--){
+        if (timeline[i].type === "timeout"){
+            continue
+        }
+        return timeline[i]
+    }
+
+    return null
+}
+
+function fault(player){
+    if (timeline.length > 0){
+        let lastRally = getLastRally()
+        if (lastRally !== null){
+            console.log(`last rally: server=${lastRally.server} type=${lastRally.type} player=${player.name}`)
+        }
+        if (lastRally !== null && lastRally.server == player.name && lastRally.type === 'fault'){
+            loseRally(player, 'double fault')
+            animate();
+        } else {
+            timeline.push(makeFaultEvent(player.name, player1.score, player2.score))
+        }
+    } else {
+        timeline.push(makeFaultEvent(player.name, player1.score, player2.score))
+    }
     updateState();
 }
 
