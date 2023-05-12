@@ -252,6 +252,9 @@ function updateState(){
     let player1StateTop = elem('player1StateTop');
     let player2StateTop = elem('player2StateTop');
 
+    elem('tablePlayer1').innerHTML = player1.name
+    elem('tablePlayer2').innerHTML = player2.name
+
     if (player1.serving) {
         player1State.innerHTML = `${player1.name} (serving)`;
         player2State.innerHTML = `${player2.name} (receiving)`
