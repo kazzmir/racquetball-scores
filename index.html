@@ -178,21 +178,33 @@
                 <div class="inner">
                     <span class="text">Player 1</span>
                     <br />
+                    <div class="form-floating mb-3 w-75">
+                        <input type="text" class="form-control" id="player1Name" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
+                        <label for="player1Name">Name</label>
+                    </div>
+                    <!--
                     <span class="text2">Name</span> <input id="player1Name" type="text" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
+                    -->
                     <br /> <br />
                     <span class="text3" id="player1StateTop">Serving</span>
                     <br />
                     <button type="button" id="player1Server" class="btn btn-secondary" onclick="setPlayer1Serving()">Set as server</button>
                 </div>
             </div>
-            <div id="graph" class="col-7 h-100">
+            <div id="graph" class="col-8 h-100">
                 <div id="plot" class="h-100"></div>
             </div>
             <div id="player2" class="col">
                 <div class="inner">
                     <span class="text">Player 2</span>
                     <br />
+                    <div class="form-floating mb-3 w-75">
+                        <input type="text" class="form-control" id="player2Name" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
+                        <label for="player2Name">Name</label>
+                    </div>
+                    <!--
                     <span class="text2">Name</span> <input id="player2Name" type="text" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
+                    -->
                     <br /> <br />
                     <span class="text3" id="player2StateTop">Receiving</span>
                     <br />
@@ -214,7 +226,7 @@
                             <span id="player1State" class="text-light fs-4">player1 (serving)</span>
                             <br />
                             <div id="player1Buttons" class="btn-group-vertical" role="group">
-                                <button type="button" class="btn btn-primary mb-1" onclick="ace(player1)">Winner (ace serve)</button>
+                                <button type="button" class="btn btn-primary mb-1" id="player1Ace" onclick="ace(player1)">Winner (ace serve)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player1)">Winner (pinch)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player1)">Winner (down the line)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player1)">Winner (splat)</button>
@@ -229,7 +241,7 @@
                             <br />
                             <span id="player2ScoreMain" class="text-light fs-1">0</span>
                             <div id="player2Buttons" class="btn-group-vertical" role="group">
-                                <button type="button" class="btn btn-primary mb-1" onclick="ace(player2)">Winner (ace serve)</button>
+                                <button type="button" class="btn btn-primary mb-1" id="player2Ace" onclick="ace(player2)">Winner (ace serve)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player2)">Winner (pinch)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player2)">Winner (down the line)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player2)">Winner (splat)</button>

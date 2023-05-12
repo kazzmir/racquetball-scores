@@ -118,6 +118,8 @@ function init(){
         Plotly.Plots.resize(plotDiv);
         // Plotly.Plots.resize(timelinePlot);
     }
+
+    updateState();
 }
 
 function addScore(playerAdd, playerSame){
@@ -269,6 +271,14 @@ function updateState(){
 
     player1Score.innerHTML = `${player1.score}`;
     player2Score.innerHTML = `${player2.score}`;
+
+    if (player1.serving){
+        elem('player1Ace').classList.remove('disabled')
+        elem('player2Ace').classList.add('disabled')
+    } else {
+        elem('player2Ace').classList.remove('disabled')
+        elem('player1Ace').classList.add('disabled')
+    }
 
     updateTimeline();
     updateStats();
