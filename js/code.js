@@ -58,11 +58,7 @@ function isPoint(event_){
 }
 
 function isPointFor(event_, player){
-    if (isSideout(event_)){
-        return false
-    }
-
-    return event_.server == player
+    return isPoint(event_) && event_.server == player
 }
 
 /* its a sideout if the player that received won the rally */
