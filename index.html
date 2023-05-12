@@ -1,25 +1,40 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
     <script src="js/plotly-2.20.0.min.js" charset="utf-8"></script>
     <script src="js/code.js"></script>
 
+    <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
+
     <style>
+
         /* make the body have a dark grey background */
-        #body {
+        .normal {
             background-color: #333;
+        }
+
+        .lprt {
+            /* light blue color */
+            background-color: #00bfff;
         }
 
         .inner{
             padding: 5px;
         }
 
+        #row1 {
+        }
+
         /* player1 should be on the left side of the graph */
         #player1{
+            /*
             float: left;
             width: 15%;
             height: 60%;
             margin-top: 20px;
             margin-left: 10px;
+            */
+            margin-left: 5px;
             border: 1px solid #888;
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
         }
@@ -28,6 +43,7 @@
          * and have a thin white border with a drop shadow
          */
         #graph {
+            /*
             float: left;
             margin-top: 20px;
             margin-left: 10px;
@@ -35,19 +51,22 @@
             height: 60%;
             border: 1px solid #888;
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
+            */
         }
 
         #player2 {
+            /*
             float: left;
             width: 15%;
             height: 60%;
             margin-top: 20px;
-            margin-left: 10px;
+            */
+            margin-right: 5px;
             border: 1px solid #888;
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
         }
 
-        #plot {
+        #x_plot {
             margin: 5px;
             height: 98%;
         }
@@ -78,7 +97,7 @@
             width: 20%;
         }
 
-        #buttons {
+        #x_buttons {
             margin-left: 42%;
             margin-top: 10px;
             width: 20%;
@@ -86,7 +105,7 @@
             font-size: 20px;
         }
 
-        #events {
+        #x_events {
             float: right;
             margin-left: 10px;
             width: 20%;
@@ -97,13 +116,13 @@
         /* the newgame button should be under where the plot is but be in the center of the screen.
          * the button should have a light-bluish tint to it.
          */
-        #newgame {
+        #x_newgame {
             font-size: 20px;
             background-color: #00bfff;
         }
 
         /* morebuttons should be under buttons */
-        #morebuttons {
+        #x_morebuttons {
             margin-left: 45%;
             margin-top: 10px;
             width: 10%;
@@ -111,74 +130,181 @@
             font-size: 20px;
         }
 
-        #timeline {
+        #x_timeline {
             clear: both;
             margin-left: 10px;
             margin-left: 16%;
             width: 60%;
         }
 
-        #z {
+        #x_z {
             clear: both;
             padding-top: 20px;
+        }
+
+        .h-10 {
+            height: 10%;
+        }
+
+        .h-60 {
+            height: 60%;
+        }
+
+        .h-3 {
+            height: 3%;
+        }
+
+        html, body {
+            height: 100%;
         }
 
     </style>
 
 </head>
-<body id="body" onload="init()">
+<body id="body" class="normal" onload="init()">
 
     <span class="text">Racquetball Scores</span>
-    <div>
-        <div id="player1">
-            <div class="inner">
-                <span class="text">Player 1</span>
-                <span class="text" id="player1Score">Score: 0</span>
-                <br />
-                <span class="text2">Name</span> <input id="player1Name" type="text" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
-                <br /> <br />
-                <span class="text3" id="player1State">Serving</span>
-                <br />
-                <button id="player1Server" onclick="setPlayer1Serving()">Set as server</button>
+    <div class="container-fluid h-100">
+        <div class="row">
+            <div class="col-1">
+                <button type="button" class="btn btn-secondary" onclick="normalStyle()">Normal</button>
+            </div>
+            <div class="col-1">
+                <button type="button" class="btn btn-secondary" onclick="lprtStyle()">LPRT</button>
             </div>
         </div>
-        <div id="graph">
-            <div id="plot"></div>
-        </div>
-        <div id="player2">
-            <div class="inner">
-                <span class="text">Player 2</span>
-                <span class="text" id="player2Score">Score: 0</span>
-                <br />
-                <span class="text2">Name</span> <input id="player2Name" type="text" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
-                <br /> <br />
-                <span class="text3" id="player2State">Receiving</span>
-                <br />
-                <button id="player2Server" onclick="setPlayer2Serving()">Set as server</button>
+        <div id="row1" class="row h-50">
+            <div id="player1" class="col">
+                <div class="inner">
+                    <span class="text">Player 1</span>
+                    <br />
+                    <div class="form-floating mb-3 w-75">
+                        <input type="text" class="form-control" id="player1Name" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
+                        <label for="player1Name">Name</label>
+                    </div>
+                    <br /> <br />
+                    <span class="text3" id="player1StateTop">Serving</span>
+                    <br />
+                    <button type="button" id="player1Server" class="btn btn-secondary" onclick="setPlayer1Serving()">Set as server</button>
+                </div>
+            </div>
+            <div id="graph" class="col-8 h-100">
+                <div id="plot" class="h-100"></div>
+            </div>
+            <div id="player2" class="col">
+                <div class="inner">
+                    <span class="text">Player 2</span>
+                    <br />
+                    <div class="form-floating mb-3 w-75">
+                        <input type="text" class="form-control" id="player2Name" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
+                        <label for="player2Name">Name</label>
+                    </div>
+                    <br /> <br />
+                    <span class="text3" id="player2StateTop">Receiving</span>
+                    <br />
+                    <button type="button" id="player2Server" class="btn btn-secondary" onclick="setPlayer2Serving()">Set as server</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="timeline">
-    </div>
+        <div class="row">
+            <div id="events" class="col-4">
+                <span class="text-light fs-3">Rally Timeline</span>
+            </div>
 
-    <br />
+            <div class="col-4">
 
-    <div id="z">
-        <span id="state" class="text center">player1 (serving) 0 - 0 player2. Rally 1</span>
-        <br />
-        <div id="buttons">
-            <button id="serverWins" onclick="serverWins()">Server wins rally</button>
-            <button id="sideout" onclick="sideout()">Side out</button>
-            <button id="undo" onclick="undo()">Undo</button>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <span id="player1State" class="text-light fs-4">player1 (serving)</span>
+                            <br />
+                            <div id="player1Buttons" class="btn-group-vertical" role="group">
+                                <button type="button" class="btn btn-primary mb-1" id="player1Ace" onclick="ace(player1)">Winner (ace serve)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player1)">Winner (pinch)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="crossCourt(player1)">Winner (cross court)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player1)">Winner (down the line)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player1)">Winner (splat)</button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="unforcedError(player1)">Unforced error</button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="skip(player1)">Skip</button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="avoidable(player1)">Avoidable</button>
+                            </div>
+                            <span id="player1ScoreMain" class="text-light fs-1">0</span>
+                        </div>
+
+                        <div class="col">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="player2State" class="text-light fs-4">player 2 (receiving)</span>
+                            <br />
+                            <span id="player2ScoreMain" class="text-light fs-1">0</span>
+                            <div id="player2Buttons" class="btn-group-vertical" role="group">
+                                <button type="button" class="btn btn-primary mb-1" id="player2Ace" onclick="ace(player2)">Winner (ace serve)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player2)">Winner (pinch)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="crossCourt(player2)">Winner (cross court)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player2)">Winner (down the line)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player2)">Winner (splat)</button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="unforcedError(player2)">Unforced error</button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="skip(player2)">Skip</button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="avoidable(player2)">Avoidable</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="newgame" class="row">
+                        <div class="col">
+                        </div>
+                        <div class="col-6">
+                            <button id="undo" type="button" class="btn btn-info mb-1" onclick="undo()">Undo last rally</button>
+                            <button id="newgame" type="button" class="btn btn-warning" onclick="newGame()">New Game</button>
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col">
+                <span class="text-light fs-3">Stats</span>
+                <br />
+                <table class="table table-primary">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th id="tablePlayer1" scope="col">player1</th>
+                            <th id="tablePlayer2" scope="col">player2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Serves</th>
+                            <td id="statsServesPlayer1">0</td>
+                            <td id="statsServesPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Aces</th>
+                            <td id="statsAcePlayer1">0</td>
+                            <td id="statsAcePlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Errors</th>
+                            <td id="statsErrorsPlayer1">0</td>
+                            <td id="statsErrorsPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Longest run</th>
+                            <td id="statsLongestRunPlayer1">0</td>
+                            <td id="statsLongestRunPlayer2">0</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div id="morebuttons">
-            <button id="newgame" onclick="newGame()">New Game</button>
+
+        <div class="row h-3">
         </div>
     </div>
 
-    <div id="events">
-        <span class="text">Timeline</span>
-    </div>
+    <script src="bootstrap/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -6,18 +6,53 @@
 let player1 = {name: "player1", x: [1], y: [0], score: 0, serving: true, hovertemplate: "Score %{y}, Rally %{x}"};
 let player2 = {name: "player2", x: [1], y: [0], score: 0, serving: false, hovertemplate: "Score %{y}, Rally %{x}"}
 
-function eventServerWins(server, score1, score2){
+function elem(id){
+    return document.getElementById(id);
+}
+
+/* a rally ends when a player hits a shot.
+ * the shot could be a winning shot (kill, pinch, etc) or a losing shot (skip)
+ *   server: the player who served the ball
+ *   lastHitPlayer: the player that last touched the ball
+ *   kind: what kind of shot the last player hit
+ *   score1: score of player 1
+ *   score2: score of player 2
+ */
+function makeRallyEvent(server, winningPlayer, lastHitPlayer, kind, score1, score2){
+    return {
+        type: "rally",
+        server: server,
+        winningPlayer: winningPlayer,
+        lastHitPlayer: lastHitPlayer,
+        kind: kind,
+        score1: score1,
+        score2: score2
+    }
+}
+
+function isError(kind){
+    return kind === 'skip' || kind === 'unforced error' || kind == 'avoidable'
+}
+
+function isPoint(event_){
+    return event_.server == event_.winningPlayer
+}
+
+function eventServerWins(server, kind, score1, score2){
     return {
         type: "server-wins",
+        kind: kind,
         server: server,
         score1: score1,
         score2: score2,
     }
 }
 
-function eventSideout(server, score1, score2){
+function eventSideout(server, player, kind, score1, score2){
     return {
-        type: "sideout",
+        type: "loser-wins",
+        player: player,
+        kind: kind,
         server: server,
         score1: score1,
         score2: score2,
@@ -60,7 +95,7 @@ function init(){
     */
 
     // set the name of each trace to the name of the player
-    layout = initialLayout()
+    let layout = initialLayout()
 
     // FIXME: overlay should show score and name of player, and maybe some other stats
     let plot = Plotly.newPlot(plotDiv, [{...player1}, {...player2}], layout);
@@ -83,6 +118,8 @@ function init(){
         Plotly.Plots.resize(plotDiv);
         // Plotly.Plots.resize(timelinePlot);
     }
+
+    updateState();
 }
 
 function addScore(playerAdd, playerSame){
@@ -136,36 +173,115 @@ function animate(){
     }) 
 }
 
-function updateState(){
-    let player1State = document.getElementById('player1State');
-    let player2State = document.getElementById('player2State');
-
-    let state = document.getElementById('state');
-    if (player1.serving) {
-        state.innerHTML = `${player1.name} (serving) ${player1.score} - ${player2.score} ${player2.name}`;
-        player1State.innerHTML = "Serving"
-        player2State.innerHTML = "Receiving"
-    } else {
-        state.innerHTML = `${player1.name} ${player1.score} - ${player2.score} ${player2.name} (serving)`;
-        player2State.innerHTML = "Serving"
-        player1State.innerHTML = "Receiving"
-    }
-
-    let player1Score = document.getElementById('player1Score');
-    player1Score.innerHTML = `Score: ${player1.score}`;
-    let player2Score = document.getElementById('player2Score');
-    player2Score.innerHTML = `Score: ${player2.score}`;
-
-    let events = document.getElementById('events');
-    events.innerHTML = "<span class='text'>Timeline</span>";
+function updateTimeline(){
+    let events = elem('events');
+    events.innerHTML = "<span class='text-light fs-3'>Timeline</span>";
     for (let i = 0; i < timeline.length; i++){
         let use = timeline[i];
+
+        if (isPoint(use)){
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.winningPlayer} wins rally with ${use.kind}. Point for ${use.server}. ${use.score1} - ${use.score2}</span>`;
+        } else {
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.winningPlayer} wins rally with ${use.kind}. Sideout. ${use.score1} - ${use.score2}</span>`;
+        }
+
+        /*
         if (use.type == "server-wins"){
-            events.innerHTML += `<br /><span class='text2'>Rally ${i+1}, Serving: ${use.server}, ${use.server} wins rally. ${use.score1} - ${use.score2}</span>`;
-        } else if (use.type == "sideout"){
-            events.innerHTML += `<br /><span class='text2'>Rally ${i+1}, Serving: ${use.server}, sideout. ${use.score1} - ${use.score2}</span>`;
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.server} wins rally with ${use.kind}. Point for ${use.server}. ${use.score1} - ${use.score2}</span>`;
+        } else if (use.type == "loser-wins"){
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${i+1}, Server: ${use.server}. ${use.player} wins rally with ${use.kind}. Sideout. ${use.score1} - ${use.score2}</span>`;
+        }
+        */
+    }
+}
+
+function computeStats(player){
+    let out = {
+        aces: 0,
+        errors: 0,
+        runs: 0,
+        serves: 0,
+    }
+
+    var currentRun = 0;
+
+    for (let i = 0; i < timeline.length; i++){
+        let use = timeline[i];
+        if (use.server === player.name){
+            out.serves += 1
+        }
+
+        if (use.kind == 'ace' && use.lastHitPlayer === player.name){
+            out.aces += 1
+        } else if (use.lastHitPlayer === player.name && isError(use.kind)){
+            out.errors += 1
+            out.runs = Math.max(out.runs, currentRun)
+            currentRun = 0;
+        }
+
+        if (use.lastHitPlayer == player.name && !isError(use.kind)){
+            currentRun += 1;
         }
     }
+
+    out.runs = Math.max(out.runs, currentRun)
+
+    return out
+
+}
+
+function updateStats(){
+    let player1Stats = computeStats(player1);
+    let player2Stats = computeStats(player2);
+
+    elem("statsAcePlayer1").innerHTML = player1Stats.aces
+    elem("statsServesPlayer1").innerHTML = player1Stats.serves
+    elem("statsErrorsPlayer1").innerHTML = player1Stats.errors
+    elem("statsLongestRunPlayer1").innerHTML = player1Stats.runs
+
+    elem("statsAcePlayer2").innerHTML = player2Stats.aces
+    elem("statsServesPlayer2").innerHTML = player2Stats.serves
+    elem("statsErrorsPlayer2").innerHTML = player2Stats.errors
+    elem("statsLongestRunPlayer2").innerHTML = player2Stats.runs
+}
+
+function updateState(){
+    let player1State = elem('player1State');
+    let player1Score = elem('player1ScoreMain');
+    let player2Score = elem('player2ScoreMain');
+    let player2State = elem('player2State');
+
+    let player1StateTop = elem('player1StateTop');
+    let player2StateTop = elem('player2StateTop');
+
+    elem('tablePlayer1').innerHTML = player1.name
+    elem('tablePlayer2').innerHTML = player2.name
+
+    if (player1.serving) {
+        player1State.innerHTML = `${player1.name} (serving)`;
+        player2State.innerHTML = `${player2.name} (receiving)`
+        player1StateTop.innerHTML = 'Serving';
+        player2StateTop.innerHTML = 'Receiving';
+    } else {
+        player2State.innerHTML = `${player2.name} (serving)`;
+        player1State.innerHTML = `${player1.name} (receiving)`
+        player2StateTop.innerHTML = 'Serving';
+        player1StateTop.innerHTML = 'Receiving';
+    }
+
+    player1Score.innerHTML = `${player1.score}`;
+    player2Score.innerHTML = `${player2.score}`;
+
+    if (player1.serving){
+        elem('player1Ace').classList.remove('disabled')
+        elem('player2Ace').classList.add('disabled')
+    } else {
+        elem('player2Ace').classList.remove('disabled')
+        elem('player1Ace').classList.add('disabled')
+    }
+
+    updateTimeline();
+    updateStats();
 }
 
 function player1AddScore(){
@@ -196,42 +312,167 @@ function setPlayer2Serving(){
 function setPlayer1Name(name){
     player1.name = name
     updateState();
-    Plotly.animate('plot', {data: [{...player1}], traces: [0]}, {transition: {duration: 0}});
+    animate();
+    // Plotly.animate('plot', {data: [{...player1}], traces: [0]}, {transition: {duration: 0}});
 }
 
 function setPlayer2Name(name){
     player2.name = name
     updateState();
-    Plotly.animate('plot', {data: [{...player2}], traces: [1]}, {transition: {duration: 0}});
+    animate();
+    // Plotly.animate('plot', {data: [{...player2}], traces: [1]}, {transition: {duration: 0}});
 }
 
-function serverWins(){
+/* the rally ended because of the winning action of 'player' */
+function winRally(player, kind){
     if (player1.serving){
-        timeline.push(eventServerWins(player1.name, player1.score+1, player2.score))
-        player1AddScore()
+        if (player == player1){
+            addScore(player1, player2)
+        } else {
+            sideout(kind)
+        }
+
+        timeline.push(makeRallyEvent(player1.name, player.name, player.name, kind, player1.score, player2.score))
     } else {
-        timeline.push(eventServerWins(player2.name, player1.score, player2.score+1))
-        player2AddScore()
+        if (player == player2){
+            // serverWins(kind)
+            addScore(player2, player1)
+        } else {
+            sideout(kind)
+        }
+
+        timeline.push(makeRallyEvent(player2.name, player.name, player.name, kind, player1.score, player2.score))
     }
 }
 
-function sideout(){
-    nextRally(player1);
-    nextRally(player2);
-    var server = player1.name
-    if (player2.serving){
-        server = player2.name
+/* the rally ended because of a losing action of 'player' */
+function loseRally(player, kind){
+    if (player1.serving){
+        var winner = player1.name
+        if (player == player1){
+            sideout(kind)
+            winner = player2.name
+        } else {
+            // serverWins(kind)
+            addScore(player1, player2)
+        }
+
+        timeline.push(makeRallyEvent(player1.name, winner, player.name, kind, player1.score, player2.score))
+    } else {
+        var winner = player2.name
+        if (player == player2){
+            sideout(kind)
+            winner = player1.name
+        } else {
+            // serverWins(kind)
+            addScore(player2, player1)
+        }
+
+        timeline.push(makeRallyEvent(player2.name, winner, player.name, kind, player1.score, player2.score))
     }
-    timeline.push(eventSideout(server, player1.score, player2.score))
-    player1.serving = !player1.serving;
-    player2.serving = !player2.serving;
+}
+
+function ace(player){
+    winRally(player, 'ace')
     animate();
     updateState();
+}
+
+function pinchWinner(player){
+    winRally(player, 'pinch')
+    animate();
+    updateState();
+}
+
+function downTheLineWinner(player){
+    winRally(player, 'down the line')
+    animate();
+    updateState();
+}
+
+function crossCourt(player){
+    winRally(player, 'cross court')
+    animate();
+    updateState();
+}
+
+function splatWinner(player){
+    winRally(player, 'splat')
+    animate();
+    updateState();
+}
+
+function unforcedError(player){
+    loseRally(player, 'unforced error')
+    animate();
+    updateState();
+}
+
+function skip(player){
+    loseRally(player, 'skip')
+    animate();
+    updateState();
+}
+
+function avoidable(player){
+    loseRally(player, 'avoidable')
+    animate();
+    updateState();
+}
+
+function serverWins(kind){
+    if (player1.serving){
+        addScore(player1, player2)
+        // timeline.push(eventServerWins(player1.name, kind, player1.score, player2.score))
+    } else {
+        addScore(player2, player1)
+        // timeline.push(eventServerWins(player2.name, kind, player1.score, player2.score))
+    }
+}
+
+function sideout(kind){
+    nextRally(player1);
+    nextRally(player2);
+    /*
+    var server = player1.name
+    var receiver = player2.name
+    if (player2.serving){
+        server = player2.name
+        receiver = player1.name
+    }
+    */
+    // timeline.push(eventSideout(server, receiver, kind, player1.score, player2.score))
+    player1.serving = !player1.serving;
+    player2.serving = !player2.serving;
 }
 
 function undo(){
     if (timeline.length > 0){
         let last = timeline.pop()
+
+        removeRally(player1)
+        removeRally(player2)
+
+        if (timeline.length > 0){
+            let xlast = timeline[timeline.length-1]
+            player1.score = xlast.score1
+            player2.score = xlast.score2
+
+            if (last.server === player1.name){
+                player1.serving = true
+                player2.serving = false
+            } else {
+                player1.serving = false
+                player2.serving = true
+            }
+        } else {
+            player1.score = 0
+            player2.score = 0
+            player1.serving = true
+            player2.serving = false
+        }
+
+        /*
         if (last.type == "server-wins"){
             removeRally(player1)
             removeRally(player2)
@@ -240,12 +481,13 @@ function undo(){
             } else {
                 player2.score -= 1;
             }
-        } else if (last.type == "sideout"){
+        } else if (last.type == "loser-wins"){
             removeRally(player1)
             removeRally(player2)
             player1.serving = !player1.serving;
             player2.serving = !player2.serving;
         }
+        */
     }
 
     animate();
@@ -263,8 +505,20 @@ function newGame(){
     player2.serving = false
     timeline = []
     let plotDiv = document.getElementById('plot');
-    layout = initialLayout()
+    let layout = initialLayout()
     Plotly.react(plotDiv, {data: [{...player1}, {...player2}], traces: [0, 1], layout: layout});
     Plotly.redraw('plot');
     updateState()
+}
+
+function normalStyle(){
+    let list = document.body.classList
+    list.remove('lprt')
+    list.add('normal')
+}
+
+function lprtStyle(){
+    let list = document.body.classList
+    list.add('lprt')
+    list.remove('normal')
 }

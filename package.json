@@ -1,0 +1,25 @@
+{
+    "name": "rball-stats",
+    "version": "1.0",
+    "devDependencies": {
+        "eslint": "^8.40.0"
+    },
+    "scripts": {
+        "lint": "eslint js/code.js"
+    },
+    "eslintConfig": {
+        "rules": {
+            "no-undef": 2,
+            "no-unused-vars": 0
+        },
+        "env": {
+            "browser": true,
+            "es2021": true
+        },
+        "extends": "eslint:recommended",
+        "overrides": [],
+        "parserOptions": {
+            "ecmaVersion": "latest"
+        }
+    }
+}
