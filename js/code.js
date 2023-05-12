@@ -390,6 +390,12 @@ function downTheLineWinner(player){
     updateState();
 }
 
+function crossCourt(player){
+    winRally(player, 'cross court')
+    animate();
+    updateState();
+}
+
 function splatWinner(player){
     winRally(player, 'splat')
     animate();

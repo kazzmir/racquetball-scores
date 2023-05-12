@@ -173,7 +173,7 @@
                 <button type="button" class="btn btn-secondary" onclick="lprtStyle()">LPRT</button>
             </div>
         </div>
-        <div id="row1" class="row h-60">
+        <div id="row1" class="row h-50">
             <div id="player1" class="col">
                 <div class="inner">
                     <span class="text">Player 1</span>
@@ -182,9 +182,6 @@
                         <input type="text" class="form-control" id="player1Name" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
                         <label for="player1Name">Name</label>
                     </div>
-                    <!--
-                    <span class="text2">Name</span> <input id="player1Name" type="text" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
-                    -->
                     <br /> <br />
                     <span class="text3" id="player1StateTop">Serving</span>
                     <br />
@@ -202,9 +199,6 @@
                         <input type="text" class="form-control" id="player2Name" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
                         <label for="player2Name">Name</label>
                     </div>
-                    <!--
-                    <span class="text2">Name</span> <input id="player2Name" type="text" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
-                    -->
                     <br /> <br />
                     <span class="text3" id="player2StateTop">Receiving</span>
                     <br />
@@ -228,6 +222,7 @@
                             <div id="player1Buttons" class="btn-group-vertical" role="group">
                                 <button type="button" class="btn btn-primary mb-1" id="player1Ace" onclick="ace(player1)">Winner (ace serve)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player1)">Winner (pinch)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="crossCourt(player1)">Winner (cross court)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player1)">Winner (down the line)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player1)">Winner (splat)</button>
                                 <button type="button" class="btn btn-danger mb-1" onclick="unforcedError(player1)">Unforced error</button>
@@ -243,6 +238,7 @@
                             <div id="player2Buttons" class="btn-group-vertical" role="group">
                                 <button type="button" class="btn btn-primary mb-1" id="player2Ace" onclick="ace(player2)">Winner (ace serve)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="pinchWinner(player2)">Winner (pinch)</button>
+                                <button type="button" class="btn btn-primary mb-1" onclick="crossCourt(player2)">Winner (cross court)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="downTheLineWinner(player2)">Winner (down the line)</button>
                                 <button type="button" class="btn btn-primary mb-1" onclick="splatWinner(player2)">Winner (splat)</button>
                                 <button type="button" class="btn btn-danger mb-1" onclick="unforcedError(player2)">Unforced error</button>
