@@ -310,6 +310,7 @@ function computeStats(player){
         crossCourts: 0,
         downTheLines: 0,
         splats: 0,
+        avoidables: 0,
     }
 
     var currentRun = 0;
@@ -377,6 +378,10 @@ function computeStats(player){
                 out.crossCourts += 1
             }
 
+            if (use.kind == 'avoidable'){
+                out.avoidables += 1
+            }
+
             if (!isError(use)){
                 out.errors += 1
             }
@@ -418,6 +423,7 @@ function updateStats(){
         elem(`statsCrossCourtPlayer${player}`).innerHTML = stats.crossCourts
         elem(`statsDownTheLinePlayer${player}`).innerHTML = stats.downTheLines
         elem(`statsSplatLinePlayer${player}`).innerHTML = stats.splats
+        elem(`statsAvoidablesPlayer${player}`).innerHTML = stats.avoidables
     }
 
     let player1Stats = computeStats(player1);
@@ -425,28 +431,6 @@ function updateStats(){
 
     setStats(player1Stats, 1)
     setStats(player2Stats, 2)
-
-    /*
-    elem("statsAcePlayer1").innerHTML = player1Stats.aces
-    elem("statsServesPlayer1").innerHTML = player1Stats.serves
-    elem("statsFirstServesPlayer1").innerHTML = firstServeStats(player1Stats)
-    elem("statsFaultsPlayer1").innerHTML = player1Stats.faults
-    elem("statsErrorsPlayer1").innerHTML = player1Stats.errors
-    elem("statsLongestRunPlayer1").innerHTML = player1Stats.runs
-    elem("statsSkipsPlayer1").innerHTML = player1Stats.skips
-    elem("statsPinchesPlayer1").innerHTML = player1Stats.pinches
-    elem("statsCrossCourtPlayer1").innerHTML = player1Stats.crossCourts
-
-    elem("statsAcePlayer2").innerHTML = player2Stats.aces
-    elem("statsServesPlayer2").innerHTML = player2Stats.serves
-    elem("statsFirstServesPlayer2").innerHTML = firstServeStats(player2Stats)
-    elem("statsFaultsPlayer2").innerHTML = player2Stats.faults
-    elem("statsErrorsPlayer2").innerHTML = player2Stats.errors
-    elem("statsLongestRunPlayer2").innerHTML = player2Stats.runs
-    elem("statsSkipsPlayer2").innerHTML = player2Stats.skips
-    elem("statsPinchesPlayer2").innerHTML = player2Stats.pinches
-    elem("statsCrossCourtPlayer2").innerHTML = player2Stats.crossCourts
-    */
 }
 
 function updateState(){
