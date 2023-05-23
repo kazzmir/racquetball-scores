@@ -134,6 +134,9 @@ function isPoint(event_){
 }
 
 function isPointFor(event_, player){
+    if (isRallyScoring()){
+        return event_.winningPlayer == player
+    }
     return isPoint(event_) && event_.server == player
 }
 
@@ -282,6 +285,12 @@ function removeRally(player){
     player.y.pop();
 }
 
+function animateRuns(){
+    let plotDiv = elem('plot1')
+
+
+}
+
 function animate(){
     let plotDiv = elem('plot2');
 
@@ -308,6 +317,8 @@ function animate(){
         // console.log("finished animating");
         // Plotly.redraw('plot');
     }) 
+
+    animateRuns()
 }
 
 function isDoubleFault(event_){
@@ -377,6 +388,28 @@ function removeDoubleFaults(timeline){
     return out
 }
 
+// returns an array of (player, score) pairs that are runs for that player
+function computeRuns(){
+
+    let normalized = normalizeTimeline(timeline)
+
+    let noDoubleFaults = removeDoubleFaults(normalized)
+
+    for (let i = 0; i < noDoubleFaults.length; i++){
+        if (noDoubleFaults[i].server == player.name){
+            out.firstServeTries += 1
+        }
+    }
+
+    for (let i = 0; i < normalized.length; i++){
+        let use = normalized[i];
+
+        if (use.type == "timeout"){
+            continue
+        }
+    }
+
+}
 
 /* iterate through the timeline and compute statistics based on the events that occured */
 function computeStats(player){
