@@ -579,7 +579,7 @@ function computeStats(player){
                 out.avoidables += 1
             }
 
-            if (!isError(use)){
+            if (isError(use.kind)){
                 out.errors += 1
             }
         }
