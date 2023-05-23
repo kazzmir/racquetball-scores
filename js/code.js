@@ -3,8 +3,8 @@
  * rally scoring
  */
 
-let player1 = {name: "player1", x: [1], y: [0], score: 0, serving: true, hovertemplate: "Score %{y}, Rally %{x}"};
-let player2 = {name: "player2", x: [1], y: [0], score: 0, serving: false, hovertemplate: "Score %{y}, Rally %{x}"}
+let player1 = {name: "player1", x: [1], y: [0], score: 0, opportunities: 0, serving: true, hovertemplate: "Score %{y}, Rally %{x}"};
+let player2 = {name: "player2", x: [1], y: [0], score: 0, opportunities: 0, serving: false, hovertemplate: "Score %{y}, Rally %{x}"}
 let gameSetup = {totalPoints: 11, scoring: 'normal'}
 
 function elem(id){
@@ -372,6 +372,7 @@ function computeStats(player){
         downTheLines: 0,
         splats: 0,
         avoidables: 0,
+        opportunities: player.opportunities,
     }
 
     var currentRun = 0;
@@ -485,6 +486,7 @@ function updateStats(){
         elem(`statsDownTheLinePlayer${player}`).innerHTML = stats.downTheLines
         elem(`statsSplatLinePlayer${player}`).innerHTML = stats.splats
         elem(`statsAvoidablesPlayer${player}`).innerHTML = stats.avoidables
+        elem(`statsOpportunitiesPlayer${player}`).innerHTML = stats.opportunities
     }
 
     let player1Stats = computeStats(player1);
@@ -534,6 +536,11 @@ function updateState(){
     }
 
     updateTimeline();
+    updateStats();
+}
+
+function missedOpportunity(player){
+    player.opportunities += 1
     updateStats();
 }
 
@@ -822,10 +829,12 @@ function newGame(){
     player1.y = [0]
     player1.score = 0
     player1.serving = true
+    player1.opportunities = 0
     player2.x = [1]
     player2.y = [0]
     player2.score = 0
     player2.serving = false
+    player2.opportunities = 0
     timeline = []
     let plotDiv = document.getElementById('plot');
     let layout = initialLayout()
