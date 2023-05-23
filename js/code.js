@@ -15,10 +15,10 @@ function isRallyScoring(){
     return gameSetup.scoring === 'rally'
 }
 
-function toggleGraph(){
-    elem('plot').classList.toggle('hide')
-    elem('graphButtonHide').classList.toggle('hide')
-    elem('graphButtonShow').classList.toggle('hide')
+function toggleGraph(n){
+    elem(`plot${n}`).classList.toggle('hide')
+    elem(`graphButtonHide${n}`).classList.toggle('hide')
+    elem(`graphButtonShow${n}`).classList.toggle('hide')
 }
 
 function setTotalPoints(total){
@@ -176,7 +176,7 @@ let timeline = [];
 
 function initialLayout(){
     return {
-        title: 'Racquetball game',
+        title: 'Rally flow',
         paper_bgcolor: '#eee',
         plot_bgcolor: '#eee',
         xaxis: {
@@ -196,13 +196,29 @@ function initialLayout(){
     }
 }
 
+function runsLayout(){
+    return {
+        title: 'Runs',
+        paper_bgcolor: '#eee',
+        plot_bgcolor: '#eee',
+        xaxis: {
+            title: 'Run',
+            range: [1, 20],
+        },
+        yaxis: {
+            title: 'Score',
+            range: [0, 20],
+        },
+    }
+}
+
 function init(){
     console.log("init");
 
     setTotalPoints(15)
     setNormalScoring()
 
-    let plotDiv = document.getElementById('plot');
+    let plotDiv = elem('plot2');
 
     /*
     player1 = {name: "player1", x: [0], y: [0]}
@@ -215,6 +231,7 @@ function init(){
     // FIXME: overlay should show score and name of player, and maybe some other stats
     let plot = Plotly.newPlot(plotDiv, [{...player1}, {...player2}], layout);
 
+    /*
     let timelineLayout = {
         type: "scatter",
         showlegend: false,
@@ -223,6 +240,7 @@ function init(){
             range: [0, 1],
         }
     }
+    */
 
     /*
     let timelineDiv = document.getElementById('timeline');
@@ -233,6 +251,10 @@ function init(){
         Plotly.Plots.resize(plotDiv);
         // Plotly.Plots.resize(timelinePlot);
     }
+
+
+    let plotDivRuns = elem('plot1')
+    let plotRuns = Plotly.newPlot(plotDivRuns, [], runsLayout())
 
     updateState();
 }
@@ -261,7 +283,7 @@ function removeRally(player){
 }
 
 function animate(){
-    let plotDiv = elem('plot');
+    let plotDiv = elem('plot2');
 
     let x1 = [...player1.x]
     let y1 = [...player1.y]
@@ -282,7 +304,7 @@ function animate(){
         }
     }
 
-    Plotly.animate('plot', {data: [trace1, trace2], traces: [0, 1], layout: {xaxis: {range: [1, rangeX]}}}, transition).then(function(){
+    Plotly.animate('plot2', {data: [trace1, trace2], traces: [0, 1], layout: {xaxis: {range: [1, rangeX]}}}, transition).then(function(){
         // console.log("finished animating");
         // Plotly.redraw('plot');
     }) 
@@ -836,10 +858,10 @@ function newGame(){
     player2.serving = false
     player2.opportunities = 0
     timeline = []
-    let plotDiv = document.getElementById('plot');
+    let plotDiv = document.getElementById('plot2');
     let layout = initialLayout()
     Plotly.react(plotDiv, {data: [{...player1}, {...player2}], traces: [0, 1], layout: layout});
-    Plotly.redraw('plot');
+    Plotly.redraw('plot2');
     updateState()
 }
 
