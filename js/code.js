@@ -5,9 +5,67 @@
 
 let player1 = {name: "player1", x: [1], y: [0], score: 0, serving: true, hovertemplate: "Score %{y}, Rally %{x}"};
 let player2 = {name: "player2", x: [1], y: [0], score: 0, serving: false, hovertemplate: "Score %{y}, Rally %{x}"}
+let gameSetup = {totalPoints: 11, scoring: 'normal'}
 
 function elem(id){
     return document.getElementById(id);
+}
+
+function isRallyScoring(){
+    return gameSetup.scoring === 'rally'
+}
+
+function toggleGraph(){
+    elem('plot').classList.toggle('hide')
+    elem('graphButtonHide').classList.toggle('hide')
+    elem('graphButtonShow').classList.toggle('hide')
+}
+
+function setTotalPoints(total){
+    gameSetup.totalPoints = total
+    var selectedPoints
+    var unselectedPoints
+
+    if (total == 11){
+        selectedPoints = elem('points11')
+        unselectedPoints = elem('points15')
+    } else {
+        selectedPoints = elem('points15')
+        unselectedPoints = elem('points11')
+    }
+
+    unselectedPoints.classList.remove('btn-primary')
+    unselectedPoints.classList.add('btn-secondary')
+    selectedPoints.classList.remove('btn-secondary')
+    selectedPoints.classList.add('btn-primary')
+}
+
+function setScoringStyle(kind){
+    gameSetup.scoring = kind
+
+    var selectedPoints
+    var unselectedPoints
+
+    if (gameSetup.scoring === 'normal'){
+        selectedPoints = elem('scoringNormal')
+        unselectedPoints = elem('scoringRally')
+    } else {
+        selectedPoints = elem('scoringRally')
+        unselectedPoints = elem('scoringNormal')
+    }
+
+    unselectedPoints.classList.remove('btn-primary')
+    unselectedPoints.classList.add('btn-secondary')
+    selectedPoints.classList.remove('btn-secondary')
+    selectedPoints.classList.add('btn-primary')
+}
+
+function setNormalScoring(){
+    setScoringStyle('normal')
+}
+
+function setRallyScoring(){
+    setScoringStyle('rally')
 }
 
 /* a rally ends when a player hits a shot.
@@ -140,6 +198,9 @@ function initialLayout(){
 
 function init(){
     console.log("init");
+
+    setTotalPoints(15)
+    setNormalScoring()
 
     let plotDiv = document.getElementById('plot');
 
@@ -521,7 +582,11 @@ function winRally(player, kind){
         if (player == player1){
             addScore(player1, player2)
         } else {
-            sideout(kind)
+            if (isRallyScoring()){
+                rallysideout(player2, player1)
+            } else {
+                sideout()
+            }
         }
 
         timeline.push(makeRallyEvent(player1.name, player.name, player.name, kind, player1.score, player2.score))
@@ -530,7 +595,11 @@ function winRally(player, kind){
             // serverWins(kind)
             addScore(player2, player1)
         } else {
-            sideout(kind)
+            if (isRallyScoring()){
+                rallysideout(player1, player2)
+            } else {
+                sideout()
+            }
         }
 
         timeline.push(makeRallyEvent(player2.name, player.name, player.name, kind, player1.score, player2.score))
@@ -542,7 +611,11 @@ function loseRally(player, kind){
     if (player1.serving){
         var winner = player1.name
         if (player == player1){
-            sideout(kind)
+            if (isRallyScoring()){
+                rallysideout(player2, player1)
+            } else {
+                sideout()
+            }
             winner = player2.name
         } else {
             // serverWins(kind)
@@ -553,7 +626,11 @@ function loseRally(player, kind){
     } else {
         var winner = player2.name
         if (player == player2){
-            sideout(kind)
+            if (isRallyScoring()){
+                rallysideout(player1, player2)
+            } else {
+                sideout()
+            }
             winner = player1.name
         } else {
             // serverWins(kind)
@@ -670,7 +747,13 @@ function serverWins(kind){
     }
 }
 
-function sideout(kind){
+function rallysideout(addPoint, samePoint){
+    addScore(addPoint, samePoint)
+    player1.serving = !player1.serving;
+    player2.serving = !player2.serving;
+}
+
+function sideout(){
     nextRally(player1);
     nextRally(player2);
     /*
