@@ -305,6 +305,7 @@ function computeStats(player){
         faults: 0,
         firstServe: 0,
         firstServeTries: 0,
+        skips: 0,
     }
 
     var currentRun = 0;
@@ -355,6 +356,10 @@ function computeStats(player){
             }
         }
 
+        if (use.lastHitPlayer == player.name && use.kind == 'skip'){
+            out.skips += 1;
+        }
+
         /* its a run of points if its a point for the player */
         if (isPointFor(use, player.name)){
             currentRun += 1;
@@ -387,6 +392,7 @@ function updateStats(){
     elem("statsFaultsPlayer1").innerHTML = player1Stats.faults
     elem("statsErrorsPlayer1").innerHTML = player1Stats.errors
     elem("statsLongestRunPlayer1").innerHTML = player1Stats.runs
+    elem("statsSkipsPlayer1").innerHTML = player1Stats.skips
 
     elem("statsAcePlayer2").innerHTML = player2Stats.aces
     elem("statsServesPlayer2").innerHTML = player2Stats.serves
@@ -394,6 +400,7 @@ function updateStats(){
     elem("statsFaultsPlayer2").innerHTML = player2Stats.faults
     elem("statsErrorsPlayer2").innerHTML = player2Stats.errors
     elem("statsLongestRunPlayer2").innerHTML = player2Stats.runs
+    elem("statsSkipsPlayer2").innerHTML = player2Stats.skips
 }
 
 function updateState(){

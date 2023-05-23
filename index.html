@@ -15,7 +15,9 @@
 
         .lprt {
             /* light blue color */
-            background-color: #00bfff;
+            /* background-color: #000; */
+            background-color: #3c5dd1;
+            /* 3d5dd2 */
         }
 
         .inner{
@@ -27,42 +29,30 @@
 
         /* player1 should be on the left side of the graph */
         #player1{
-            /*
-            float: left;
-            width: 15%;
-            height: 60%;
-            margin-top: 20px;
-            margin-left: 10px;
-            */
             margin-left: 5px;
-            border: 1px solid #888;
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
+            background-color: #111;
+        }
+
+        .lprt #player1{
+            margin-left: 5px;
+            box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
+            background-color: #111;
         }
 
         /* graph div should be smaller than the body
          * and have a thin white border with a drop shadow
          */
         #graph {
-            /*
-            float: left;
-            margin-top: 20px;
-            margin-left: 10px;
-            width: 60%;
-            height: 60%;
-            border: 1px solid #888;
-            box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
-            */
         }
 
         #player2 {
-            /*
-            float: left;
-            width: 15%;
-            height: 60%;
-            margin-top: 20px;
-            */
             margin-right: 5px;
-            border: 1px solid #888;
+            box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
+        }
+
+        .lprt #player2 {
+            margin-right: 5px;
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
         }
 
@@ -161,7 +151,7 @@
     </style>
 
 </head>
-<body id="body" class="normal" onload="init()">
+<body id="body" class="normal bg-gradient" onload="init()">
     <span class="text fs-3">Racquetball Scores</span> <a class="text-light" href="mailto:info@racquetballstats.com">info@racquetballstats.com</a>
     <div class="container-fluid h-100">
         <div class="row mb-2">
@@ -173,7 +163,7 @@
             </div>
         </div>
         <div id="row1" class="row">
-            <div id="player1" class="col">
+            <div id="player1" class="col bg-gradient">
                 <div class="inner">
                     <span class="text">Player 1</span>
                     <br />
@@ -342,7 +332,11 @@
                             <td id="statsLongestRunPlayer1">0</td>
                             <td id="statsLongestRunPlayer2">0</td>
                         </tr>
-
+                        <tr>
+                            <th scope="row">Skips</th>
+                            <td id="statsSkipsPlayer1">0</td>
+                            <td id="statsSkipsPlayer2">0</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
