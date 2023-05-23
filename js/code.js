@@ -5,9 +5,29 @@
 
 let player1 = {name: "player1", x: [1], y: [0], score: 0, serving: true, hovertemplate: "Score %{y}, Rally %{x}"};
 let player2 = {name: "player2", x: [1], y: [0], score: 0, serving: false, hovertemplate: "Score %{y}, Rally %{x}"}
+let gameSetup = {totalPoints: 11, scoring: 'normal'}
 
 function elem(id){
     return document.getElementById(id);
+}
+
+function setTotalPoints(total){
+    gameSetup.totalPoints = total
+    var selectedPoints
+    var unselectedPoints
+
+    if (total == 11){
+        selectedPoints = elem('points11')
+        unselectedPoints = elem('points15')
+    } else {
+        selectedPoints = elem('points15')
+        unselectedPoints = elem('points11')
+    }
+
+    unselectedPoints.classList.remove('btn-primary')
+    unselectedPoints.classList.add('btn-secondary')
+    selectedPoints.classList.remove('btn-secondary')
+    selectedPoints.classList.add('btn-primary')
 }
 
 /* a rally ends when a player hits a shot.
@@ -140,6 +160,8 @@ function initialLayout(){
 
 function init(){
     console.log("init");
+
+    setTotalPoints(15)
 
     let plotDiv = document.getElementById('plot');
 
