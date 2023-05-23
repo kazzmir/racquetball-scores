@@ -306,6 +306,11 @@ function computeStats(player){
         firstServe: 0,
         firstServeTries: 0,
         skips: 0,
+        pinches: 0,
+        crossCourts: 0,
+        downTheLines: 0,
+        splats: 0,
+        avoidables: 0,
     }
 
     var currentRun = 0;
@@ -351,13 +356,35 @@ function computeStats(player){
         if (use.lastHitPlayer == player.name){
             if (use.kind == 'ace'){
                 out.aces += 1
-            } else if (!isError(use)){
+            }
+
+            if (use.kind == 'skip'){
+                out.skips += 1
+            }
+
+            if (use.kind == 'pinch'){
+                out.pinches += 1
+            }
+
+            if (use.kind == 'down the line'){
+                out.downTheLines += 1
+            }
+
+            if (use.kind == 'splat'){
+                out.splats += 1
+            }
+
+            if (use.kind == 'cross court'){
+                out.crossCourts += 1
+            }
+
+            if (use.kind == 'avoidable'){
+                out.avoidables += 1
+            }
+
+            if (!isError(use)){
                 out.errors += 1
             }
-        }
-
-        if (use.lastHitPlayer == player.name && use.kind == 'skip'){
-            out.skips += 1;
         }
 
         /* its a run of points if its a point for the player */
@@ -383,24 +410,27 @@ function firstServeStats(stats){
 }
 
 function updateStats(){
+
+    function setStats(stats, player){
+        elem(`statsAcePlayer${player}`).innerHTML = stats.aces
+        elem(`statsServesPlayer${player}`).innerHTML = stats.serves
+        elem(`statsFirstServesPlayer${player}`).innerHTML = firstServeStats(stats)
+        elem(`statsFaultsPlayer${player}`).innerHTML = stats.faults
+        elem(`statsErrorsPlayer${player}`).innerHTML = stats.errors
+        elem(`statsLongestRunPlayer${player}`).innerHTML = stats.runs
+        elem(`statsSkipsPlayer${player}`).innerHTML = stats.skips
+        elem(`statsPinchesPlayer${player}`).innerHTML = stats.pinches
+        elem(`statsCrossCourtPlayer${player}`).innerHTML = stats.crossCourts
+        elem(`statsDownTheLinePlayer${player}`).innerHTML = stats.downTheLines
+        elem(`statsSplatLinePlayer${player}`).innerHTML = stats.splats
+        elem(`statsAvoidablesPlayer${player}`).innerHTML = stats.avoidables
+    }
+
     let player1Stats = computeStats(player1);
     let player2Stats = computeStats(player2);
 
-    elem("statsAcePlayer1").innerHTML = player1Stats.aces
-    elem("statsServesPlayer1").innerHTML = player1Stats.serves
-    elem("statsFirstServesPlayer1").innerHTML = firstServeStats(player1Stats)
-    elem("statsFaultsPlayer1").innerHTML = player1Stats.faults
-    elem("statsErrorsPlayer1").innerHTML = player1Stats.errors
-    elem("statsLongestRunPlayer1").innerHTML = player1Stats.runs
-    elem("statsSkipsPlayer1").innerHTML = player1Stats.skips
-
-    elem("statsAcePlayer2").innerHTML = player2Stats.aces
-    elem("statsServesPlayer2").innerHTML = player2Stats.serves
-    elem("statsFirstServesPlayer2").innerHTML = firstServeStats(player2Stats)
-    elem("statsFaultsPlayer2").innerHTML = player2Stats.faults
-    elem("statsErrorsPlayer2").innerHTML = player2Stats.errors
-    elem("statsLongestRunPlayer2").innerHTML = player2Stats.runs
-    elem("statsSkipsPlayer2").innerHTML = player2Stats.skips
+    setStats(player1Stats, 1)
+    setStats(player2Stats, 2)
 }
 
 function updateState(){
