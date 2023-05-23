@@ -30,6 +30,34 @@ function setTotalPoints(total){
     selectedPoints.classList.add('btn-primary')
 }
 
+function setScoringStyle(kind){
+    gameSetup.scoring = kind
+
+    var selectedPoints
+    var unselectedPoints
+
+    if (gameSetup.scoring === 'normal'){
+        selectedPoints = elem('scoringNormal')
+        unselectedPoints = elem('scoringRally')
+    } else {
+        selectedPoints = elem('scoringRally')
+        unselectedPoints = elem('scoringNormal')
+    }
+
+    unselectedPoints.classList.remove('btn-primary')
+    unselectedPoints.classList.add('btn-secondary')
+    selectedPoints.classList.remove('btn-secondary')
+    selectedPoints.classList.add('btn-primary')
+}
+
+function setNormalScoring(){
+    setScoringStyle('normal')
+}
+
+function setRallyScoring(){
+    setScoringStyle('rally')
+}
+
 /* a rally ends when a player hits a shot.
  * the shot could be a winning shot (kill, pinch, etc) or a losing shot (skip)
  *   server: the player who served the ball
@@ -162,6 +190,7 @@ function init(){
     console.log("init");
 
     setTotalPoints(15)
+    setNormalScoring()
 
     let plotDiv = document.getElementById('plot');
 
