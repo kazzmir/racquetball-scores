@@ -206,7 +206,7 @@ function runsLayout(){
         plot_bgcolor: '#eee',
         xaxis: {
             title: 'Run',
-            range: [1, 20],
+            range: [0, 20],
         },
         yaxis: {
             title: 'Score',
@@ -250,14 +250,14 @@ function init(){
     let timelinePlot = Plotly.newPlot(timelineDiv, [], timelineLayout);
     */
 
+    let plotDivRuns = elem('plot1')
+    let plotRuns = Plotly.newPlot(plotDivRuns, [{x: [], y: []}, {x:[], y:[]}], runsLayout())
+
     window.onresize = function(){
         Plotly.Plots.resize(plotDiv);
+        Plotly.Plots.resize(plotDivRuns);
         // Plotly.Plots.resize(timelinePlot);
     }
-
-
-    let plotDivRuns = elem('plot1')
-    let plotRuns = Plotly.newPlot(plotDivRuns, [], runsLayout())
 
     updateState();
 }
@@ -286,14 +286,60 @@ function removeRally(player){
 }
 
 function animateRuns(){
-    let plotDiv = elem('plot1')
+    let runs = computeRuns()
 
+    var trace1 = {
+        x: [],
+        y: [],
+        text: [],
+        score: [],
+        name: player1.name,
+        mode: 'markers+text',
+        type: 'scatter',
+        hovertemplate: "Run: %{y}",
+        marker: { size: 12 },
+    }
 
+    var trace2 = {
+        x: [],
+        y: [],
+        score: [],
+        text: [],
+        name: player2.name,
+        mode: 'markers+text',
+        type: 'scatter',
+        hovertemplate: "Run: %{y}",
+        marker: { size: 12 },
+    }
+
+    let player1Score = 0
+    let player2Score = 0
+    for (let i = 0; i < runs.length; i++){
+        let score1 = runs[i][0]
+        let score2 = runs[i][1]
+
+        player1Score += score1
+        player2Score += score2
+
+        if (score1 !== 0){
+            trace1.x.push(i+1)
+            trace1.y.push(score1)
+            trace1.score.push(player1Score)
+            trace1.text.push(score1)
+        }
+
+        if (score2 !== 0){
+            trace2.x.push(i+1)
+            trace2.y.push(score2)
+            trace2.score.push(player2Score)
+            trace2.text.push(score2)
+        }
+    }
+
+    Plotly.animate('plot1', {data: [trace1, trace2], traces: [0, 1]})
 }
 
 function animate(){
-    let plotDiv = elem('plot2');
-
     let x1 = [...player1.x]
     let y1 = [...player1.y]
 
@@ -391,6 +437,7 @@ function removeDoubleFaults(timeline){
 // returns an array of (player, score) pairs that are runs for that player
 function computeRuns(){
 
+    /*
     let normalized = normalizeTimeline(timeline)
 
     let noDoubleFaults = removeDoubleFaults(normalized)
@@ -401,14 +448,47 @@ function computeRuns(){
         }
     }
 
-    for (let i = 0; i < normalized.length; i++){
-        let use = normalized[i];
+    [(0, 0), (0, 1), (0, 1), (1, 1), (2, 1), (3, 1)]
+    */
 
-        if (use.type == "timeout"){
-            continue
+    let score1 = 0
+    let run1 = 0
+    let score2 = 0
+    let run2 = 0
+
+    let runs = []
+
+    for (let i = 0; i < timeline.length; i++){
+        let use = timeline[i];
+
+        // player 2 got a point, player 1's run ended
+        if (use.score1 === score1 && use.score2 !== score2){
+            if (run1 > 0){
+                runs.push([run1, run2])
+                run1 = 0
+                run2 = 0
+            }
+
+            score2 = use.score2
+            run2 += 1
+        } else if (use.score2 === score2 && use.score1 !== score1){
+            // player 1 got a point, player 2's run ended
+            if (run2 > 0){
+                runs.push([run1, run2])
+                run1 = 0
+                run2 = 0
+            }
+
+            score1 = use.score1
+            run1 += 1
         }
     }
 
+    if (run1 > 0 || run2 > 0){
+        runs.push([run1, run2])
+    }
+
+    return runs
 }
 
 /* iterate through the timeline and compute statistics based on the events that occured */
@@ -891,11 +971,12 @@ function newGame(){
     player2.serving = false
     player2.opportunities = 0
     timeline = []
-    let plotDiv = document.getElementById('plot2');
+    let plotDiv = elem('plot2');
     let layout = initialLayout()
     Plotly.react(plotDiv, {data: [{...player1}, {...player2}], traces: [0, 1], layout: layout});
     Plotly.redraw('plot2');
     updateState()
+    animateRuns()
 }
 
 function normalStyle(){
