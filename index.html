@@ -48,6 +48,10 @@
             /* display: none; */
         }
 
+        .hide {
+            display: none;
+        }
+
         #player2 {
             margin-right: 5px;
             box-shadow: 2px 2px 5px rgba(50,0,0,0.5);
@@ -385,8 +389,14 @@
 
     </div>
     <div class="container">
-        <div id="graph" class="row h-3">
-            <div id="plot" class="h-20">
+        <div id="graph" class="row">
+            <div class="col-6">
+            </div>
+            <div class="col-1">
+                <button id="graphButtonHide" type="button" class="btn-primary" onclick="toggleGraph()">Hide graph</button>
+                <button id="graphButtonShow" type="button" class="btn-primary hide" onclick="toggleGraph()">Show graph</button>
+            </div>
+            <div id="plot" class="col-5 h-100">
             </div>
         </div>
     </div>

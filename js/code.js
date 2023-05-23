@@ -11,6 +11,16 @@ function elem(id){
     return document.getElementById(id);
 }
 
+function isRallyScoring(){
+    return gameSetup.scoring === 'rally'
+}
+
+function toggleGraph(){
+    elem('plot').classList.toggle('hide')
+    elem('graphButtonHide').classList.toggle('hide')
+    elem('graphButtonShow').classList.toggle('hide')
+}
+
 function setTotalPoints(total){
     gameSetup.totalPoints = total
     var selectedPoints
@@ -572,7 +582,11 @@ function winRally(player, kind){
         if (player == player1){
             addScore(player1, player2)
         } else {
-            sideout(kind)
+            if (isRallyScoring()){
+                rallysideout(player2, player1)
+            } else {
+                sideout()
+            }
         }
 
         timeline.push(makeRallyEvent(player1.name, player.name, player.name, kind, player1.score, player2.score))
@@ -581,7 +595,11 @@ function winRally(player, kind){
             // serverWins(kind)
             addScore(player2, player1)
         } else {
-            sideout(kind)
+            if (isRallyScoring()){
+                rallysideout(player1, player2)
+            } else {
+                sideout()
+            }
         }
 
         timeline.push(makeRallyEvent(player2.name, player.name, player.name, kind, player1.score, player2.score))
@@ -593,7 +611,11 @@ function loseRally(player, kind){
     if (player1.serving){
         var winner = player1.name
         if (player == player1){
-            sideout(kind)
+            if (isRallyScoring()){
+                rallysideout(player2, player1)
+            } else {
+                sideout()
+            }
             winner = player2.name
         } else {
             // serverWins(kind)
@@ -604,7 +626,11 @@ function loseRally(player, kind){
     } else {
         var winner = player2.name
         if (player == player2){
-            sideout(kind)
+            if (isRallyScoring()){
+                rallysideout(player1, player2)
+            } else {
+                sideout()
+            }
             winner = player1.name
         } else {
             // serverWins(kind)
@@ -721,7 +747,13 @@ function serverWins(kind){
     }
 }
 
-function sideout(kind){
+function rallysideout(addPoint, samePoint){
+    addScore(addPoint, samePoint)
+    player1.serving = !player1.serving;
+    player2.serving = !player2.serving;
+}
+
+function sideout(){
     nextRally(player1);
     nextRally(player2);
     /*
