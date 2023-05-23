@@ -45,6 +45,7 @@
          * and have a thin white border with a drop shadow
          */
         #graph {
+            /* display: none; */
         }
 
         #player2 {
@@ -205,8 +206,82 @@
 
                 </div>
             </div>
-            <div id="graph" class="col-8 h-100">
-                <div id="plot" class="h-100"></div>
+            <div class="col h-100">
+                <span class="text-light fs-3">Stats</span>
+                <br />
+                <table class="table table-primary">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th id="tablePlayer1" scope="col">player1</th>
+                            <th id="tablePlayer2" scope="col">player2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Serves</th>
+                            <td id="statsServesPlayer1">0</td>
+                            <td id="statsServesPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Aces</th>
+                            <td id="statsAcePlayer1">0</td>
+                            <td id="statsAcePlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Faults</th>
+                            <td id="statsFaultsPlayer1">0</td>
+                            <td id="statsFaultsPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">First serves</th>
+                            <td id="statsFirstServesPlayer1">0</td>
+                            <td id="statsFirstServesPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Longest run</th>
+                            <td id="statsLongestRunPlayer1">0</td>
+                            <td id="statsLongestRunPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Winner (pinch)</th>
+                            <td id="statsPinchesPlayer1">0</td>
+                            <td id="statsPinchesPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Winner (cross court)</th>
+                            <td id="statsCrossCourtPlayer1">0</td>
+                            <td id="statsCrossCourtPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Winner (down the line)</th>
+                            <td id="statsDownTheLinePlayer1">0</td>
+                            <td id="statsDownTheLinePlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Winner (splat)</th>
+                            <td id="statsSplatLinePlayer1">0</td>
+                            <td id="statsSplatLinePlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Errors</th>
+                            <td id="statsErrorsPlayer1">0</td>
+                            <td id="statsErrorsPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Skips</th>
+                            <td id="statsSkipsPlayer1">0</td>
+                            <td id="statsSkipsPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Avoidables</th>
+                            <td id="statsAvoidablesPlayer1">0</td>
+                            <td id="statsAvoidablesPlayer2">0</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
             </div>
             <div id="player2" class="col bg-gradient">
                 <div class="inner">
@@ -292,84 +367,14 @@
             </div>
 
             <div class="col-3">
-                <span class="text-light fs-3">Stats</span>
-                <br />
-                <table class="table table-primary">
-                    <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th id="tablePlayer1" scope="col">player1</th>
-                            <th id="tablePlayer2" scope="col">player2</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Serves</th>
-                            <td id="statsServesPlayer1">0</td>
-                            <td id="statsServesPlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Aces</th>
-                            <td id="statsAcePlayer1">0</td>
-                            <td id="statsAcePlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Faults</th>
-                            <td id="statsFaultsPlayer1">0</td>
-                            <td id="statsFaultsPlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">First serves</th>
-                            <td id="statsFirstServesPlayer1">0</td>
-                            <td id="statsFirstServesPlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Longest run</th>
-                            <td id="statsLongestRunPlayer1">0</td>
-                            <td id="statsLongestRunPlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Winner (pinch)</th>
-                            <td id="statsPinchesPlayer1">0</td>
-                            <td id="statsPinchesPlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Winner (cross court)</th>
-                            <td id="statsCrossCourtPlayer1">0</td>
-                            <td id="statsCrossCourtPlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Winner (down the line)</th>
-                            <td id="statsDownTheLinePlayer1">0</td>
-                            <td id="statsDownTheLinePlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Winner (splat)</th>
-                            <td id="statsSplatLinePlayer1">0</td>
-                            <td id="statsSplatLinePlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Errors</th>
-                            <td id="statsErrorsPlayer1">0</td>
-                            <td id="statsErrorsPlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Skips</th>
-                            <td id="statsSkipsPlayer1">0</td>
-                            <td id="statsSkipsPlayer2">0</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Avoidables</th>
-                            <td id="statsAvoidablesPlayer1">0</td>
-                            <td id="statsAvoidablesPlayer2">0</td>
-                        </tr>
-
-                    </tbody>
-                </table>
             </div>
         </div>
 
-        <div class="row h-3">
+    </div>
+    <div class="container">
+        <div id="graph" class="row h-3">
+            <div id="plot" class="h-20">
+            </div>
         </div>
     </div>
 
