@@ -126,11 +126,11 @@ function makeReplayEvent(server, score1, score2){
 }
 
 function isError(kind){
-    return kind === 'skip' || kind === 'unforced error' || kind == 'avoidable'
+    return kind === 'skip' || kind === 'unforced error' || kind == 'avoidable' || kind == 'error'
 }
 
 function isWinner(kind){
-    return kind == 'pinch' || kind == 'down the line' || kind == 'cross court' || kind == 'splat'
+    return kind == 'pinch' || kind == 'down the line' || kind == 'cross court' || kind == 'splat' || kind == 'winner'
 }
 
 function isPoint(event_){
@@ -881,6 +881,18 @@ function replay(){
     timeline.push(makeReplayEvent(getServer(), player1.score, player2.score))
     animate();
     updateState();
+}
+
+function genericError(player){
+    loseRally(player, 'error')
+    animate();
+    updateState();
+}
+
+function genericWinner(player){
+    winRally(player, 'winner')
+    animate()
+    updateState()
 }
 
 function avoidable(player){
