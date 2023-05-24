@@ -642,10 +642,8 @@ function updateStats(){
 }
 
 function updateState(){
-    let player1State = elem('player1State');
     let player1Score = elem('player1ScoreMain');
     let player2Score = elem('player2ScoreMain');
-    let player2State = elem('player2State');
 
     let player1StateTop = elem('player1StateTop');
     let player2StateTop = elem('player2StateTop');
@@ -654,13 +652,9 @@ function updateState(){
     elem('tablePlayer2').innerHTML = player2.name
 
     if (player1.serving) {
-        player1State.innerHTML = `${player1.name} (serving)`;
-        player2State.innerHTML = `${player2.name} (receiving)`
         player1StateTop.innerHTML = 'Serving';
         player2StateTop.innerHTML = 'Receiving';
     } else {
-        player2State.innerHTML = `${player2.name} (serving)`;
-        player1State.innerHTML = `${player1.name} (receiving)`
         player2StateTop.innerHTML = 'Serving';
         player1StateTop.innerHTML = 'Receiving';
     }

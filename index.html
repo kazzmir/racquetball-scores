@@ -196,7 +196,10 @@
                         <input type="text" class="form-control" id="player1Name" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
                         <label for="player1Name">Name</label>
                     </div>
-                    <br /> <br />
+                    <br />
+                    <span class="text-light fs-2">Score:</span>
+                    <span id="player1ScoreMain" class="text-light fs-2">0</span>
+                    <br />
                     <span class="text3" id="player1StateTop">Serving</span>
                     <br />
                     <button type="button" id="player1Server" class="btn btn-secondary" onclick="setPlayer1Serving()">Set as server</button>
@@ -330,7 +333,10 @@
                         <input type="text" class="form-control" id="player2Name" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
                         <label for="player2Name">Name</label>
                     </div>
-                    <br /> <br />
+                    <br />
+                    <span class="text-light fs-2">Score:</span>
+                    <span id="player2ScoreMain" class="text-light fs-2">0</span>
+                    <br />
                     <span class="text3" id="player2StateTop">Receiving</span>
                     <br />
                     <button type="button" id="player2Server" class="btn btn-secondary" onclick="setPlayer2Serving()">Set as server</button>
@@ -381,21 +387,6 @@
             <div class="col">
 
                 <div class="container">
-                    <div class="row">
-                        <div class="col-4">
-                            <span id="player1State" class="text-light fs-4">player1 (serving)</span>
-                            <br />
-                            <span id="player1ScoreMain" class="text-light fs-1">0</span>
-                        </div>
-                        <div class="col">
-                        </div>
-                        <div class="col-4">
-                            <span id="player2State" class="text-light fs-4">player 2 (receiving)</span>
-                            <br />
-                            <span id="player2ScoreMain" class="text-light fs-1">0</span>
-                        </div>
-                    </div>
-
                     <div id="newgame" class="row">
                         <div class="col">
                         </div>
