@@ -129,6 +129,10 @@ function isError(kind){
     return kind === 'skip' || kind === 'unforced error' || kind == 'avoidable'
 }
 
+function isWinner(kind){
+    return kind == 'pinch' || kind == 'down the line' || kind == 'cross court' || kind == 'splat'
+}
+
 function isPoint(event_){
     return event_.server == event_.winningPlayer
 }
@@ -508,6 +512,7 @@ function computeStats(player){
         splats: 0,
         avoidables: 0,
         opportunities: player.opportunities,
+        winners: 0,
     }
 
     var currentRun = 0;
@@ -579,6 +584,10 @@ function computeStats(player){
                 out.avoidables += 1
             }
 
+            if (isWinner(use.kind)){
+                out.winners += 1
+            }
+
             if (isError(use.kind)){
                 out.errors += 1
             }
@@ -622,6 +631,7 @@ function updateStats(){
         elem(`statsSplatLinePlayer${player}`).innerHTML = stats.splats
         elem(`statsAvoidablesPlayer${player}`).innerHTML = stats.avoidables
         elem(`statsOpportunitiesPlayer${player}`).innerHTML = stats.opportunities
+        elem(`statsWinnersPlayer${player}`).innerHTML = stats.winners
     }
 
     let player1Stats = computeStats(player1);
