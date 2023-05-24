@@ -126,7 +126,11 @@ function makeReplayEvent(server, score1, score2){
 }
 
 function isError(kind){
-    return kind === 'skip' || kind === 'unforced error' || kind == 'avoidable'
+    return kind === 'skip' || kind === 'unforced error' || kind == 'avoidable' || kind == 'error'
+}
+
+function isWinner(kind){
+    return kind == 'pinch' || kind == 'down the line' || kind == 'cross court' || kind == 'splat' || kind == 'winner'
 }
 
 function isPoint(event_){
@@ -508,6 +512,7 @@ function computeStats(player){
         splats: 0,
         avoidables: 0,
         opportunities: player.opportunities,
+        winners: 0,
     }
 
     var currentRun = 0;
@@ -579,6 +584,10 @@ function computeStats(player){
                 out.avoidables += 1
             }
 
+            if (isWinner(use.kind)){
+                out.winners += 1
+            }
+
             if (isError(use.kind)){
                 out.errors += 1
             }
@@ -622,6 +631,7 @@ function updateStats(){
         elem(`statsSplatLinePlayer${player}`).innerHTML = stats.splats
         elem(`statsAvoidablesPlayer${player}`).innerHTML = stats.avoidables
         elem(`statsOpportunitiesPlayer${player}`).innerHTML = stats.opportunities
+        elem(`statsWinnersPlayer${player}`).innerHTML = stats.winners
     }
 
     let player1Stats = computeStats(player1);
@@ -632,10 +642,8 @@ function updateStats(){
 }
 
 function updateState(){
-    let player1State = elem('player1State');
     let player1Score = elem('player1ScoreMain');
     let player2Score = elem('player2ScoreMain');
-    let player2State = elem('player2State');
 
     let player1StateTop = elem('player1StateTop');
     let player2StateTop = elem('player2StateTop');
@@ -644,13 +652,9 @@ function updateState(){
     elem('tablePlayer2').innerHTML = player2.name
 
     if (player1.serving) {
-        player1State.innerHTML = `${player1.name} (serving)`;
-        player2State.innerHTML = `${player2.name} (receiving)`
         player1StateTop.innerHTML = 'Serving';
         player2StateTop.innerHTML = 'Receiving';
     } else {
-        player2State.innerHTML = `${player2.name} (serving)`;
-        player1State.innerHTML = `${player1.name} (receiving)`
         player2StateTop.innerHTML = 'Serving';
         player1StateTop.innerHTML = 'Receiving';
     }
@@ -871,6 +875,18 @@ function replay(){
     timeline.push(makeReplayEvent(getServer(), player1.score, player2.score))
     animate();
     updateState();
+}
+
+function genericError(player){
+    loseRally(player, 'error')
+    animate();
+    updateState();
+}
+
+function genericWinner(player){
+    winRally(player, 'winner')
+    animate()
+    updateState()
 }
 
 function avoidable(player){
