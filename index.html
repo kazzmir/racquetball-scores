@@ -202,7 +202,10 @@
                     <br />
                     <span class="text3" id="player1StateTop">Serving</span>
                     <br />
-                    <button type="button" id="player1Server" class="btn btn-secondary" onclick="setPlayer1Serving()">Set as server</button>
+                    <div class="btn-group gap-3" role="group">
+                        <button type="button" id="player1Server" class="btn btn-secondary" onclick="setPlayer1Serving()">Set as server</button>
+                        <button type="button" class="btn btn-secondary" id="player1Fault" onclick="fault(player1)">Fault serve</button>
+                    </div>
                     <br />
                     <br />
 
@@ -231,7 +234,6 @@
                         </div>
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-success" onclick="missedOpportunity(player1)">Missed opportunity</button>
-                            <button type="button" class="btn btn-secondary" id="player1Fault" onclick="fault(player1)">Fault serve</button>
                         </div>
                         <div>
                         </div>
@@ -345,7 +347,10 @@
                     <br />
                     <span class="text3" id="player2StateTop">Receiving</span>
                     <br />
-                    <button type="button" id="player2Server" class="btn btn-secondary" onclick="setPlayer2Serving()">Set as server</button>
+                    <div class="btn-group gap-3" role="group">
+                        <button type="button" id="player2Server" class="btn btn-secondary" onclick="setPlayer2Serving()">Set as server</button>
+                        <button type="button" class="btn btn-secondary" id="player2Fault" onclick="fault(player2)">Fault serve</button>
+                    </div>
                     <br />
                     <br />
 
@@ -373,7 +378,6 @@
                         </div>
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-success" onclick="missedOpportunity(player2)">Missed opportunity</button>
-                            <button type="button" class="btn btn-secondary" id="player2Fault" onclick="fault(player2)">Fault serve</button>
                         </div>
                         <div></div>
                         <div></div>
