@@ -241,6 +241,7 @@
                         </div>
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-warning" onclick="timeout(player1)">Timeout</button>
+                            <button type="button" class="btn btn-light" onclick="appeal(player1)">Appeal</button>
                         </div>
                     </div>
 
@@ -328,7 +329,11 @@
                             <td id="statsAvoidablesPlayer1">0</td>
                             <td id="statsAvoidablesPlayer2">0</td>
                         </tr>
-
+                        <tr>
+                            <th scope="row">Appeals</th>
+                            <td id="statsAppealsPlayer1">0</td>
+                            <td id="statsAppealsPlayer2">0</td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -383,6 +388,7 @@
                         <div></div>
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-warning" onclick="timeout(player2)">Timeout</button>
+                            <button type="button" class="btn btn-light" onclick="appeal(player2)">Appeal</button>
                         </div>
                     </div>
 
