@@ -142,7 +142,7 @@ function isError(kind){
 }
 
 function isWinner(kind){
-    return kind == 'pinch' || kind == 'down the line' || kind == 'cross court' || kind == 'splat' || kind == 'winner'
+    return kind == 'pinch' || kind == 'down the line' || kind == 'cross court' || kind == 'splat' || kind == 'winner' || kind == 'ace'
 }
 
 function isPoint(event_){
