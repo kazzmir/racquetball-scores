@@ -217,6 +217,7 @@
 
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-primary" id="player1Ace" onclick="ace(player1)">Winner (ace serve)</button>
+                            <button type="button" class="btn btn-primary" onclick="killshot(player1)">Winner (kill shot)</button>
                         </div>
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-primary" onclick="pinchWinner(player1)">Winner (pinch)</button>
@@ -288,6 +289,11 @@
                             <th scope="row">Winners</th>
                             <td id="statsWinnersPlayer1">0</td>
                             <td id="statsWinnersPlayer2">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Winner (killshot)</th>
+                            <td id="statsKillPlayer1">0</td>
+                            <td id="statsKillPlayer2">0</td>
                         </tr>
                         <tr>
                             <th scope="row">Winner (pinch)</th>
@@ -367,6 +373,7 @@
 
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-primary" id="player2Ace" onclick="ace(player2)">Winner (ace serve)</button>
+                            <button type="button" class="btn btn-primary" onclick="killshot(player2)">Winner (kill shot)</button>
                         </div>
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-primary" onclick="pinchWinner(player2)">Winner (pinch)</button>

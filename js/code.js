@@ -142,7 +142,7 @@ function isError(kind){
 }
 
 function isWinner(kind){
-    return kind == 'pinch' || kind == 'down the line' || kind == 'cross court' || kind == 'splat' || kind == 'winner' || kind == 'ace'
+    return kind == 'pinch' || kind == 'down the line' || kind == 'cross court' || kind == 'splat' || kind == 'winner' || kind == 'ace' || kind == 'kill'
 }
 
 function isPoint(event_){
@@ -511,6 +511,7 @@ function computeRuns(){
 function computeStats(player){
     let out = {
         aces: 0,
+        kills: 0,
         errors: 0,
         runs: 0,
         serves: 0,
@@ -597,6 +598,10 @@ function computeStats(player){
                 out.avoidables += 1
             }
 
+            if (use.kind == 'kill'){
+                out.kills += 1;
+            }
+
             if (isWinner(use.kind)){
                 out.winners += 1
             }
@@ -646,6 +651,7 @@ function updateStats(){
         elem(`statsOpportunitiesPlayer${player}`).innerHTML = stats.opportunities
         elem(`statsWinnersPlayer${player}`).innerHTML = stats.winners
         elem(`statsAppealsPlayer${player}`).innerHTML = stats.appeals
+        elem(`statsKillPlayer${player}`).innerHTML = stats.kills
     }
 
     let player1Stats = computeStats(player1);
@@ -826,6 +832,12 @@ function downTheLineWinner(player){
 
 function crossCourt(player){
     winRally(player, 'cross court')
+    animate();
+    updateState();
+}
+
+function killshot(player){
+    winRally(player, 'kill')
     animate();
     updateState();
 }
