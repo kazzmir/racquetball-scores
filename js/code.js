@@ -428,6 +428,27 @@ function updateTimeline(){
     }
 }
 
+function updateRuns(){
+    let runs = computeRuns()
+    let div = elem('runs');
+    div.innerHTML = "<span class='text-light fs-3'>Runs</span>";
+    let p1score = 0
+    let p2score = 0
+    let p1name = player1.name
+    let p2name = player2.name
+    for (let i = 0; i < runs.length; i++){
+        let p1run = runs[i][0];
+        let p2run = runs[i][1];
+        p1score += p1run
+        p2score += p2run
+        if (p1run > 0){
+            div.innerHTML += `<br /><span class='text-light fs-6'>${p1name} run of ${p1run}. Score ${p1score} - ${p2score}</span>`;
+        } else if (p2run > 0){
+            div.innerHTML += `<br /><span class='text-light fs-6'>${p2name} run of ${p2run}. Score ${p1score} - ${p2score}</span>`;
+        }
+    }
+}
+
 /* remove all timeout events */
 function normalizeTimeline(timeline){
     let out = []
@@ -695,6 +716,7 @@ function updateState(){
     }
 
     updateTimeline();
+    updateRuns();
     updateStats();
 }
 
