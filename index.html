@@ -193,8 +193,8 @@
             </div>
         </div>
         <div id="row1" class="row">
-            <div id="player1" class="col bg-gradient">
-                <div class="inner">
+            <div id="player1" class="col bg-gradient position-relative">
+                <div class="inner position-absolute end-0 me-3">
                     <span class="text">Player 1</span>
                     <br />
                     <div class="form-floating mb-3 w-75">
@@ -372,26 +372,26 @@
 
                     <div id="player2Buttons" class="btn-group-vertical gap-3" role="group">
                         <div class="btn-group gap-3" role="group">
-                            <button type="button" class="btn btn-primary" onclick="genericWinner(player2)">Winner</button>
                             <button type="button" class="btn btn-danger" onclick="genericError(player2)">Error</button>
+                            <button type="button" class="btn btn-primary" onclick="genericWinner(player2)">Winner</button>
                         </div>
 
                         <div class="btn-group gap-3" role="group">
-                            <button type="button" class="btn btn-primary" id="player2Ace" onclick="ace(player2)">Winner (ace serve)</button>
                             <button type="button" class="btn btn-primary" onclick="killshot(player2)">Winner (kill shot)</button>
+                            <button type="button" class="btn btn-primary" id="player2Ace" onclick="ace(player2)">Winner (ace serve)</button>
                         </div>
                         <div class="btn-group gap-3" role="group">
-                            <button type="button" class="btn btn-primary" onclick="pinchWinner(player2)">Winner (pinch)</button>
                             <button type="button" class="btn btn-primary" onclick="crossCourt(player2)">Winner (cross court)</button>
+                            <button type="button" class="btn btn-primary" onclick="pinchWinner(player2)">Winner (pinch)</button>
                         </div>
                         <div class="btn-group gap-3" role="group">
-                            <button type="button" class="btn btn-primary" onclick="downTheLineWinner(player2)">Winner (down the line)</button>
                             <button type="button" class="btn btn-primary" onclick="splatWinner(player2)">Winner (splat)</button>
+                            <button type="button" class="btn btn-primary" onclick="downTheLineWinner(player2)">Winner (down the line)</button>
                         </div>
                         <div class="btn-group gap-3" role="group">
-                            <button type="button" class="btn btn-danger" onclick="unforcedError(player2)">Unforced error</button>
-                            <button type="button" class="btn btn-danger" onclick="skip(player2)">Skip</button>
                             <button type="button" class="btn btn-danger" onclick="avoidable(player2)">Avoidable</button>
+                            <button type="button" class="btn btn-danger" onclick="skip(player2)">Skip</button>
+                            <button type="button" class="btn btn-danger" onclick="unforcedError(player2)">Unforced error</button>
                         </div>
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-success" onclick="missedOpportunity(player2)">Missed opportunity</button>
@@ -399,8 +399,8 @@
                         <div></div>
                         <div></div>
                         <div class="btn-group gap-3" role="group">
-                            <button type="button" class="btn btn-warning" onclick="timeout(player2)">Timeout</button>
                             <button type="button" class="btn btn-light" onclick="appeal(player2)">Appeal</button>
+                            <button type="button" class="btn btn-warning" onclick="timeout(player2)">Timeout</button>
                         </div>
                     </div>
 
