@@ -9,6 +9,7 @@ function makePlayer(name, serving){
         x: [1], y: [0],
         score: 0,
         opportunities: 0,
+        ceiling: 0,
         serving: serving,
         appeals: 0,
         hovertemplate: "Score %{y}, Rally %{x}"
@@ -546,6 +547,7 @@ function computeStats(player){
         splats: 0,
         avoidables: 0,
         opportunities: player.opportunities,
+        ceiling: player.ceiling,
         winners: 0,
         appeals: player.appeals,
     }
@@ -670,6 +672,7 @@ function updateStats(){
         elem(`statsSplatLinePlayer${player}`).innerHTML = stats.splats
         elem(`statsAvoidablesPlayer${player}`).innerHTML = stats.avoidables
         elem(`statsOpportunitiesPlayer${player}`).innerHTML = stats.opportunities
+        elem(`statsCeilingBallPlayer${player}`).innerHTML = stats.ceiling
         elem(`statsWinnersPlayer${player}`).innerHTML = stats.winners
         elem(`statsAppealsPlayer${player}`).innerHTML = stats.appeals
         elem(`statsKillPlayer${player}`).innerHTML = stats.kills
@@ -722,6 +725,11 @@ function updateState(){
 
 function missedOpportunity(player){
     player.opportunities += 1
+    updateStats();
+}
+
+function ceilingBall(player){
+    player.ceiling += 1
     updateStats();
 }
 
@@ -1034,12 +1042,14 @@ function newGame(){
     player1.score = 0
     player1.serving = true
     player1.opportunities = 0
+    player1.ceiling = 0
     player1.appeals = 0
     player2.x = [1]
     player2.y = [0]
     player2.score = 0
     player2.serving = false
     player2.opportunities = 0
+    player2.ceiling = 0
     player2.appeals = 0
     timeline = []
     let plotDiv = elem('plot2');
