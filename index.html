@@ -239,6 +239,7 @@
                             <button type="button" class="btn btn-danger" onclick="avoidable(player1)">Avoidable</button>
                         </div>
                         <div class="btn-group gap-3" role="group">
+                            <button type="button" class="btn btn-success" onclick="ceilingBall(player1)">Ceiling Ball</button>
                             <button type="button" class="btn btn-success" onclick="missedOpportunity(player1)">Missed opportunity</button>
                         </div>
                         <div>
@@ -326,6 +327,12 @@
                             <td id="statsOpportunitiesPlayer2">0</td>
                         </tr>
                         <tr>
+                            <th scope="row">Ceiling ball</th>
+                            <td id="statsCeilingBallPlayer1">0</td>
+                            <td id="statsCeilingBallPlayer2">0</td>
+                        </tr>
+
+                        <tr>
                             <th scope="row">Errors</th>
                             <td id="statsErrorsPlayer1">0</td>
                             <td id="statsErrorsPlayer2">0</td>
@@ -395,6 +402,7 @@
                         </div>
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-success" onclick="missedOpportunity(player2)">Missed opportunity</button>
+                            <button type="button" class="btn btn-success" onclick="ceilingBall(player2)">Ceiling Ball</button>
                         </div>
                         <div></div>
                         <div></div>
