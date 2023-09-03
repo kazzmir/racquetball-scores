@@ -18,7 +18,7 @@ function makePlayer(name, serving){
 
 let player1 = makePlayer("player1", true);
 let player2 = makePlayer("player2", false);
-let gameSetup = {totalPoints: 11, scoring: 'normal'}
+let gameSetup = {totalPoints: 11, scoring: 'normal', team: 'singles'}
 
 function elem(id){
     return document.getElementById(id);
@@ -53,6 +53,31 @@ function setTotalPoints(total){
     selectedPoints.classList.add('btn-primary')
 }
 
+function setTeamMode(mode){
+    gameSetup.team = mode
+    let team1Player2 = elem('team1Player2')
+
+    let selectedButton
+    let unselectedButton
+
+    if (mode == 'singles'){
+        team1Player2.classList.remove('visible')
+        team1Player2.classList.add('invisible')
+        selectedButton = elem('teamSingles')
+        unselectedButton = elem('teamDoubles')
+    } else {
+        team1Player2.classList.remove('invisible')
+        team1Player2.classList.add('visible')
+        unselectedButton = elem('teamSingles')
+        selectedButton = elem('teamDoubles')
+    }
+
+    unselectedButton.classList.remove('btn-primary')
+    unselectedButton.classList.add('btn-secondary')
+    selectedButton.classList.remove('btn-secondary')
+    selectedButton.classList.add('btn-primary')
+}
+
 function setScoringStyle(kind){
     gameSetup.scoring = kind
 
@@ -71,6 +96,14 @@ function setScoringStyle(kind){
     unselectedPoints.classList.add('btn-secondary')
     selectedPoints.classList.remove('btn-secondary')
     selectedPoints.classList.add('btn-primary')
+}
+
+function setSingles(){
+    setTeamMode('singles')
+}
+
+function setDoubles(){
+    setTeamMode('doubles')
 }
 
 function setNormalScoring(){
@@ -237,6 +270,7 @@ function init(){
 
     setTotalPoints(15)
     setNormalScoring()
+    setSingles()
 
     let plotDiv = elem('plot2');
 

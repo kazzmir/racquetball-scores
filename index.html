@@ -186,21 +186,39 @@
                 <button type="button" id="points11" class="btn btn-secondary" onclick="setTotalPoints(11)">11</button>
                 <button type="button" id="points15" class="btn btn-secondary" onclick="setTotalPoints(15)">15</button>
             </div>
-            <br />
             <div class="col-3">
                 <button type="button" id="scoringNormal" class="btn btn-secondary" onclick="setNormalScoring()">Normal scoring</button>
                 <button type="button" id="scoringRally" class="btn btn-secondary" onclick="setRallyScoring()">Rally scoring</button>
+            </div>
+            <div class="col-3">
+                <button type="button" id="teamSingles" class="btn btn-secondary" onclick="setSingles()">Singles</button>
+                <button type="button" id="teamDoubles" class="btn btn-secondary" onclick="setDoubles()">Doubles</button>
             </div>
         </div>
         <div id="row1" class="row">
             <div id="player1" class="col bg-gradient position-relative">
                 <div class="inner position-absolute end-0 me-3">
-                    <span class="text">Player 1</span>
-                    <br />
-                    <div class="form-floating mb-3 w-75">
-                        <input type="text" class="form-control" id="player1Name" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
-                        <label for="player1Name">Name</label>
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+                                <span class="text">Player 1</span>
+                                <div class="form-floating mb-3 w-75">
+                                    <input type="text" class="form-control" id="player1Name" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
+                                    <label for="player1Name">Name</label>
+                                </div>
+                            </div>
+                            <div id="team1Player2" class="col invisible">
+                                <span class="text">Partner 1</span>
+                                <div class="form-floating mb-3 w-75">
+                                    <input type="text" class="form-control" id="team1Player2Name" value="partner 1" onchange="setTeam1Player2Name(document.getElementById('team1Player2Name').value)">
+                                    <label for="team1Player2Name">Name</label>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
+
                     <br />
                     <span class="text-light fs-2">Score:</span>
                     <span id="player1ScoreMain" class="text-light fs-2">0</span>
