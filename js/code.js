@@ -22,6 +22,7 @@ class Team{
         this.serving = false
         this.score = 0
         this.num_players = 0
+        this.firstRally = false
     }
 
     addPlayer(player){
@@ -52,6 +53,13 @@ class Team{
         return this.serving
     }
 
+    startGame(){
+        this.serving = true
+        this.players[0].served = false
+        this.players[0].serving = true
+        this.firstServe = true
+    }
+
     /* the result of losing the rally can be
      *  1. next player on the team gets to serve (handout)
      *  2. sideout if all players have served
@@ -60,7 +68,11 @@ class Team{
      */
     loseRally(){
         if (this.serving){
-            for (let i = 0; i < this.players.length; i++){
+            for (let i = 0; i < this.num_players; i++){
+                if (this.players[i].serving){
+                    this.players[i].served = true
+                    continue
+                }
                 if (!this.players[i].served){
                     this.current_server = i
                     this.players[i].serving = true
@@ -68,6 +80,10 @@ class Team{
                 }
             }
 
+            for (let i = 0; i < this.players.length; i++){
+                this.players[i].serving = false
+                this.players[i].served = false
+            }
             this.serving = false
 
             return RALLY_SIDEOUT
@@ -79,21 +95,23 @@ class Team{
     /* if this team was serving and won the rally then it is a point
      * otherwise it is a sideout
      */
-    winRally(){
-        for (let i = 0; i < this.players.length; i++){
+    winRally(sideout){
+        for (let i = 0; i < this.num_players; i++){
             if (this.players[i].serving){
                 return RALLY_POINT
             }
         }
 
-        this.serving = true
-        for (let i = 0; i < this.players.length; i++){
-            this.players[i].served = false
-            this.players[i].serving = false
-        }
+        if (sideout){
+            this.serving = true
+            for (let i = 0; i < this.players.length; i++){
+                this.players[i].served = false
+                this.players[i].serving = false
+            }
 
-        /* make first player the server */
-        this.players[0].serving = true
+            /* make first player the server */
+            this.players[0].serving = true
+        }
 
         return RALLY_SIDEOUT
     }
@@ -410,6 +428,8 @@ function init(){
     setTotalPoints(15)
     setNormalScoring()
     setSingles()
+
+    team1.startGame()
 
     let plotDiv = elem('plot2');
 
@@ -961,18 +981,18 @@ function winRally(teamId, kind){
     if (team1.isServing()){
         if (teamId == team1.getId()){
             addScore(team1, team2)
-            team1.winRally()
-            team2.loseRally()
+            let sideout = team2.loseRally() == RALLY_SIDEOUT
+            team1.winRally(sideout)
         } else {
             if (isRallyScoring()){
                 addScore(team2, team1)
-                team2.winRally()
-                team1.loseRally()
+                let sideout = team1.loseRally() == RALLY_SIDEOUT
+                team2.winRally(sideout)
                 // rallysideout(team2, team1)
             } else {
                 // sideout()
-                team2.winRally()
-                team1.loseRally()
+                let sideout = team1.loseRally() == RALLY_SIDEOUT
+                team2.winRally(sideout)
             }
         }
 
@@ -985,12 +1005,12 @@ function winRally(teamId, kind){
             if (isRallyScoring()){
                 // rallysideout(player1, player2)
                 addScore(team1, team2)
-                team1.winRally()
-                team2.loseRally()
+                let sideout = team2.loseRally() == RALLY_SIDEOUT
+                team1.winRally(sideout)
             } else {
                 // sideout()
-                team1.winRally()
-                team2.loseRally()
+                let sideout = team2.loseRally() == RALLY_SIDEOUT
+                team1.winRally(sideout)
             }
         }
 
@@ -999,37 +1019,56 @@ function winRally(teamId, kind){
 }
 
 /* the rally ended because of a losing action of 'player' */
-function loseRally(player, kind){
-    if (player1.serving){
+function loseRally(teamId, kind){
+    if (team1.isServing()){
         var winner = player1.name
-        if (player == player1){
+        if (teamId == team1.getId()){
             if (isRallyScoring()){
-                rallysideout(player2, player1)
+                // rallysideout(player2, player1)
+
+                addScore(team2, team1)
+                let sideout = team1.loseRally() == RALLY_SIDEOUT
+                team2.winRally(sideout)
             } else {
-                sideout()
+                // sideout()
+
+                let sideout = team1.loseRally() == RALLY_SIDEOUT
+                team2.winRally(sideout)
             }
             winner = player2.name
         } else {
             // serverWins(kind)
-            addScore(player1, player2)
+            // addScore(player1, player2)
+            addScore(team1, team2)
+            let sideout = team2.loseRally() == RALLY_SIDEOUT
+            team1.winRally(sideout)
         }
 
-        timeline.push(makeRallyEvent(player1.name, winner, player.name, kind, player1.score, player2.score))
+        // timeline.push(makeRallyEvent(player1.name, winner, player.name, kind, player1.score, player2.score))
     } else {
         var winner = player2.name
-        if (player == player2){
+        if (teamId == team2.getId()){
             if (isRallyScoring()){
-                rallysideout(player1, player2)
+                // rallysideout(player1, player2)
+
+                addScore(team1, team2)
+                let sideout = team2.loseRally() == RALLY_SIDEOUT
+                team1.winRally(sideout)
             } else {
-                sideout()
+                // sideout()
+                let sideout = team2.loseRally() == RALLY_SIDEOUT
+                team1.winRally(sideout)
             }
             winner = player1.name
         } else {
             // serverWins(kind)
-            addScore(player2, player1)
+            // addScore(player2, player1)
+            addScore(team2, team1)
+            let sideout = team1.loseRally() == RALLY_SIDEOUT
+            team2.winRally(sideout)
         }
 
-        timeline.push(makeRallyEvent(player2.name, winner, player.name, kind, player1.score, player2.score))
+        // timeline.push(makeRallyEvent(player2.name, winner, player.name, kind, player1.score, player2.score))
     }
 }
 
@@ -1129,8 +1168,8 @@ function replay(){
     updateState();
 }
 
-function genericError(player){
-    loseRally(player, 'error')
+function genericError(teamId){
+    loseRally(teamId, 'error')
     animate();
     updateState();
 }
