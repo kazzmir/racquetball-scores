@@ -1,7 +1,115 @@
 /* FIXME:
  * add doubles
- * rally scoring
  */
+
+/* the result of a losing rally */
+const RALLY_HANDOUT = 'handout'
+const RALLY_SIDEOUT = 'sideout'
+
+/* the result of a winning rally */
+const RALLY_POINT = 'point'
+
+/* a team consists of 1 or more players.
+ * while serving, each player on the team can serve before the other team gets
+ * a chance to serve
+ */
+class Team{
+    constructor(id){
+        this.id = id
+        this.players = []
+        // index of player that is currently serving
+        this.current_server = 0
+        this.serving = false
+        this.score = 0
+        this.num_players = 0
+    }
+
+    addPlayer(player){
+        this.players.push(player)
+    }
+
+    addScore(add){
+        this.score += add
+    }
+
+    getScore(){
+        return this.score
+    }
+
+    getId(){
+        return this.id
+    }
+
+    setSingles(){
+        this.num_players = 1
+    }
+
+    setDoubles(){
+        this.num_players = 2
+    }
+
+    isServing(){
+        return this.serving
+    }
+
+    /* the result of losing the rally can be
+     *  1. next player on the team gets to serve (handout)
+     *  2. sideout if all players have served
+     *
+     * returns either 'handout' or 'sideout'
+     */
+    loseRally(){
+        if (this.serving){
+            for (let i = 0; i < this.players.length; i++){
+                if (!this.players[i].served){
+                    this.current_server = i
+                    this.players[i].serving = true
+                    return RALLY_HANDOUT
+                }
+            }
+
+            this.serving = false
+
+            return RALLY_SIDEOUT
+        }
+
+        return RALLY_POINT
+    }
+
+    /* if this team was serving and won the rally then it is a point
+     * otherwise it is a sideout
+     */
+    winRally(){
+        for (let i = 0; i < this.players.length; i++){
+            if (this.players[i].serving){
+                return RALLY_POINT
+            }
+        }
+
+        this.serving = true
+        for (let i = 0; i < this.players.length; i++){
+            this.players[i].served = false
+            this.players[i].serving = false
+        }
+
+        /* make first player the server */
+        this.players[0].serving = true
+
+        return RALLY_SIDEOUT
+    }
+}
+
+class Player{
+    constructor(name, id){
+        this.name = name
+        // true if the player served while their team has the serve
+        this.served = false
+        // true if this player is currently the server
+        this.serving = false
+        this.id = id
+        this.team = null
+    }
+}
 
 function makePlayer(name, serving){
     return {
@@ -18,7 +126,32 @@ function makePlayer(name, serving){
 
 let player1 = makePlayer("player1", true);
 let player2 = makePlayer("player2", false);
-let gameSetup = {totalPoints: 11, scoring: 'normal', team: 'singles'}
+
+let gameSetup = {totalPoints: 15, scoring: 'normal', team: 'singles'}
+
+let team1 = new Team(1)
+let team2 = new Team(2)
+
+let team1Player1 = new Player("player 1", 1)
+let team1Player2 = new Player("partner 1", 2)
+let team2Player1 = new Player("player 2", 3)
+let team2Player2 = new Player("partner 2", 4)
+
+team1.addPlayer(team1Player1)
+team1.addPlayer(team1Player2)
+
+team2.addPlayer(team2Player1)
+team2.addPlayer(team2Player2)
+
+let allPlayers = {}
+allPlayers[team1Player1.id] = team1Player1
+allPlayers[team1Player2.id] = team1Player2
+allPlayers[team2Player1.id] = team2Player1
+allPlayers[team2Player2.id] = team2Player2
+
+function getPlayerById(id){
+    return allPlayers[id]
+}
 
 function elem(id){
     return document.getElementById(id);
@@ -100,10 +233,16 @@ function setScoringStyle(kind){
 
 function setSingles(){
     setTeamMode('singles')
+
+    team1.setSingles()
+    team2.setSingles()
 }
 
 function setDoubles(){
     setTeamMode('doubles')
+
+    team1.setDoubles()
+    team2.setDoubles()
 }
 
 function setNormalScoring(){
@@ -313,7 +452,11 @@ function init(){
     updateState();
 }
 
-function addScore(playerAdd, playerSame){
+function addScore(teamAdd, teamSame){
+    teamAdd.addScore(1)
+}
+
+function addScore2(playerAdd, playerSame){
     // increment the y value to add a point
     playerAdd.x.push(playerAdd.x[playerAdd.x.length - 1] + 1);
     playerAdd.y.push(playerAdd.y[playerAdd.y.length - 1] + 1);
@@ -729,7 +872,7 @@ function updateState(){
     elem('tablePlayer1').innerHTML = player1.name
     elem('tablePlayer2').innerHTML = player2.name
 
-    if (player1.serving) {
+    if (team1.isServing()) {
         player1StateTop.innerHTML = 'Serving';
         player2StateTop.innerHTML = 'Receiving';
     } else {
@@ -737,8 +880,10 @@ function updateState(){
         player1StateTop.innerHTML = 'Receiving';
     }
 
-    player1Score.innerHTML = `${player1.score}`;
-    player2Score.innerHTML = `${player2.score}`;
+    // player1Score.innerHTML = `${player1.score}`;
+    // player2Score.innerHTML = `${player2.score}`;
+    player1Score.innerHTML = `${team1.getScore()}`;
+    player2Score.innerHTML = `${team2.getScore()}`;
 
     if (player1.serving){
         elem('player1Ace').classList.remove('disabled')
@@ -812,32 +957,44 @@ function setPlayer2Name(name){
 }
 
 /* the rally ended because of the winning action of 'player' */
-function winRally(player, kind){
-    if (player1.serving){
-        if (player == player1){
-            addScore(player1, player2)
+function winRally(teamId, kind){
+    if (team1.isServing()){
+        if (teamId == team1.getId()){
+            addScore(team1, team2)
+            team1.winRally()
+            team2.loseRally()
         } else {
             if (isRallyScoring()){
-                rallysideout(player2, player1)
+                addScore(team2, team1)
+                team2.winRally()
+                team1.loseRally()
+                // rallysideout(team2, team1)
             } else {
-                sideout()
+                // sideout()
+                team2.winRally()
+                team1.loseRally()
             }
         }
 
-        timeline.push(makeRallyEvent(player1.name, player.name, player.name, kind, player1.score, player2.score))
+        // timeline.push(makeRallyEvent(player1.name, player.name, player.name, kind, player1.score, player2.score))
     } else {
-        if (player == player2){
+        if (teamId == team2.getId()){
             // serverWins(kind)
-            addScore(player2, player1)
+            addScore(team2, team1)
         } else {
             if (isRallyScoring()){
-                rallysideout(player1, player2)
+                // rallysideout(player1, player2)
+                addScore(team1, team2)
+                team1.winRally()
+                team2.loseRally()
             } else {
-                sideout()
+                // sideout()
+                team1.winRally()
+                team2.loseRally()
             }
         }
 
-        timeline.push(makeRallyEvent(player2.name, player.name, player.name, kind, player1.score, player2.score))
+        // timeline.push(makeRallyEvent(player2.name, player.name, player.name, kind, player1.score, player2.score))
     }
 }
 
@@ -978,8 +1135,8 @@ function genericError(player){
     updateState();
 }
 
-function genericWinner(player){
-    winRally(player, 'winner')
+function genericWinner(teamId){
+    winRally(teamId, 'winner')
     animate()
     updateState()
 }

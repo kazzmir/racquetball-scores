@@ -207,6 +207,7 @@
                                     <input type="text" class="form-control" id="player1Name" value="player1" onchange="setPlayer1Name(document.getElementById('player1Name').value)">
                                     <label for="player1Name">Name</label>
                                 </div>
+                                <span class="text3" id="player1StateTop">Serving</span>
                             </div>
                             <div id="team1Player2" class="col invisible">
                                 <span class="text">Partner 1</span>
@@ -214,7 +215,7 @@
                                     <input type="text" class="form-control" id="team1Player2Name" value="partner 1" onchange="setTeam1Player2Name(document.getElementById('team1Player2Name').value)">
                                     <label for="team1Player2Name">Name</label>
                                 </div>
-
+                                <span class="text3" id="team1Player2StateTop"></span>
                             </div>
                         </div>
                     </div>
@@ -222,8 +223,6 @@
                     <br />
                     <span class="text-light fs-2">Score:</span>
                     <span id="player1ScoreMain" class="text-light fs-2">0</span>
-                    <br />
-                    <span class="text3" id="player1StateTop">Serving</span>
                     <br />
                     <div class="btn-group gap-3" role="group">
                         <button type="button" id="player1Server" class="btn btn-secondary" onclick="setPlayer1Serving()">Set as server</button>
@@ -234,7 +233,7 @@
 
                     <div id="player1Buttons" class="btn-group-vertical gap-3" role="group">
                         <div class="btn-group gap-3" role="group">
-                            <button type="button" class="btn btn-primary" onclick="genericWinner(player1)">Winner</button>
+                            <button type="button" class="btn btn-primary" onclick="genericWinner(1)">Winner</button>
                             <button type="button" class="btn btn-danger" onclick="genericError(player1)">Error</button>
                         </div>
 
@@ -398,7 +397,7 @@
                     <div id="player2Buttons" class="btn-group-vertical gap-3" role="group">
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-danger" onclick="genericError(player2)">Error</button>
-                            <button type="button" class="btn btn-primary" onclick="genericWinner(player2)">Winner</button>
+                            <button type="button" class="btn btn-primary" onclick="genericWinner(2)">Winner</button>
                         </div>
 
                         <div class="btn-group gap-3" role="group">
