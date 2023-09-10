@@ -23,6 +23,11 @@ class Team{
         this.score = 0
         this.num_players = 0
         this.firstRally = false
+
+        this.ceiling = 0
+        this.appeals = 0
+        this.opportunities = 0
+        this.timeouts = 0
     }
 
     addPlayer(player){
@@ -149,6 +154,18 @@ let gameSetup = {totalPoints: 15, scoring: 'normal', team: 'singles'}
 
 let team1 = new Team(1)
 let team2 = new Team(2)
+
+function getTeam(teamId){
+    if (teamId == team1.getId()){
+        return team1
+    }
+
+    if (teamId == team2.getId()){
+        return team2
+    }
+
+    return null
+}
 
 let team1Player1 = new Player("player 1", 1)
 let team1Player2 = new Player("partner 1", 2)
@@ -922,18 +939,18 @@ function updateState(){
     updateStats();
 }
 
-function missedOpportunity(player){
-    player.opportunities += 1
+function missedOpportunity(teamId){
+    getTeam(teamId).opportunities += 1
     updateStats();
 }
 
-function ceilingBall(player){
-    player.ceiling += 1
+function ceilingBall(teamId){
+    getTeam(teamId).ceiling += 1
     updateStats();
 }
 
-function appeal(player){
-    player.appeals += 1
+function appeal(teamId){
+    getTeam(teamId).appeals += 1
     updateState();
 }
 
@@ -1072,44 +1089,44 @@ function loseRally(teamId, kind){
     }
 }
 
-function ace(player){
-    winRally(player, 'ace')
+function ace(teamId){
+    winRally(teamId, 'ace')
     animate();
     updateState();
 }
 
-function pinchWinner(player){
-    winRally(player, 'pinch')
+function pinchWinner(teamId){
+    winRally(teamId, 'pinch')
     animate();
     updateState();
 }
 
-function downTheLineWinner(player){
-    winRally(player, 'down the line')
+function downTheLineWinner(teamId){
+    winRally(teamId, 'down the line')
     animate();
     updateState();
 }
 
-function crossCourt(player){
-    winRally(player, 'cross court')
+function crossCourt(teamId){
+    winRally(teamId, 'cross court')
     animate();
     updateState();
 }
 
-function killshot(player){
-    winRally(player, 'kill')
+function killshot(teamId){
+    winRally(teamId, 'kill')
     animate();
     updateState();
 }
 
-function splatWinner(player){
-    winRally(player, 'splat')
+function splatWinner(teamId){
+    winRally(teamId, 'splat')
     animate();
     updateState();
 }
 
-function unforcedError(player){
-    loseRally(player, 'unforced error')
+function unforcedError(teamId){
+    loseRally(teamId, 'unforced error')
     animate();
     updateState();
 }
@@ -1125,23 +1142,23 @@ function getLastRally(){
     return null
 }
 
-function fault(player){
+function fault(teamId){
     if (timeline.length > 0){
         let lastRally = getLastRally()
         if (lastRally !== null && lastRally.server == player.name && lastRally.type === 'fault'){
             loseRally(player, 'double fault')
             animate();
         } else {
-            timeline.push(makeFaultEvent(player.name, player1.score, player2.score))
+            // timeline.push(makeFaultEvent(player.name, player1.score, player2.score))
         }
     } else {
-        timeline.push(makeFaultEvent(player.name, player1.score, player2.score))
+        // timeline.push(makeFaultEvent(player.name, player1.score, player2.score))
     }
     updateState();
 }
 
-function skip(player){
-    loseRally(player, 'skip')
+function skip(teamId){
+    loseRally(teamId, 'skip')
     animate();
     updateState();
 }
@@ -1154,8 +1171,9 @@ function getServer(){
     return player2.name
 }
 
-function timeout(player){
-    timeline.push(makeTimeoutEvent(getServer(), player.name, player1.score, player2.score))
+function timeout(teamId){
+    getTeam(teamId).timeouts += 1
+    // timeline.push(makeTimeoutEvent(getServer(), player.name, player1.score, player2.score))
     updateState();
 }
 
@@ -1180,8 +1198,8 @@ function genericWinner(teamId){
     updateState()
 }
 
-function avoidable(player){
-    loseRally(player, 'avoidable')
+function avoidable(teamId){
+    loseRally(teamId, 'avoidable')
     animate();
     updateState();
 }
