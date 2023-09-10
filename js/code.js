@@ -76,6 +76,7 @@ class Team{
             for (let i = 0; i < this.num_players; i++){
                 if (this.players[i].serving){
                     this.players[i].served = true
+                    this.players[i].serving = false
                     continue
                 }
                 if (!this.players[i].served){
@@ -119,6 +120,53 @@ class Team{
         }
 
         return RALLY_SIDEOUT
+    }
+
+    getPlayerStateElements(){
+        let span1 = 'player1StateTop'
+        let span2 = 'team1Player2StateTop'
+
+        if (this.getId() == 2){
+            span1 = 'player2StateTop'
+            span2 = 'team2Player2StateTop'
+        }
+
+        let player1 = elem(span1)
+        let player2 = elem(span2)
+
+        return [player1, player2]
+    }
+
+    updateServing(){
+        /*
+        let span1 = 'player1StateTop'
+        let span2 = 'team1Player2StateTop'
+
+        if (getId() == 2){
+            span1 = 'player2StateTop'
+            span2 = 'team2Player2StateTop'
+        }
+
+        let player1 = elem(span1)
+        let player2 = elem(span2)
+        */
+
+        let [player1, player2] = this.getPlayerStateElements()
+
+        player1.innerHTML = ''
+        player2.innerHTML = ''
+
+        if (this.players[0].serving){
+            player1.innerHTML = 'Serving'
+        } else if (this.num_players == 2 && this.players[1].serving){
+            player2.innerHTML = 'Serving'
+        }
+    }
+
+    updateReceiving(){
+        let [player1, player2] = this.getPlayerStateElements()
+        player1.innerHTML = 'Receiving'
+        player2.innerHTML = 'Receiving'
     }
 }
 
@@ -910,11 +958,20 @@ function updateState(){
     elem('tablePlayer2').innerHTML = player2.name
 
     if (team1.isServing()) {
+        /*
         player1StateTop.innerHTML = 'Serving';
         player2StateTop.innerHTML = 'Receiving';
+        */
+
+        team1.updateServing()
+        team2.updateReceiving()
     } else {
+        team2.updateServing()
+        team1.updateReceiving()
+        /*
         player2StateTop.innerHTML = 'Serving';
         player1StateTop.innerHTML = 'Receiving';
+        */
     }
 
     // player1Score.innerHTML = `${player1.score}`;
