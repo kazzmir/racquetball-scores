@@ -377,27 +377,35 @@
             </div>
             <div id="player2" class="col bg-gradient">
                 <div class="inner">
-                    <span class="text">Player 2</span>
-                    <br />
-                    <div class="form-floating mb-3 w-75">
-                        <input type="text" class="form-control" id="player2Name" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
-                        <label for="player2Name">Name</label>
-                    </div>
 
-                    <div id="team2Player2" class="col invisible">
-                        <span class="text">Partner 2</span>
-                        <div class="form-floating mb-3 w-75">
-                            <input type="text" class="form-control" id="team2Player2Name" value="partner 2" onchange="setTeam2Player2Name(document.getElementById('team2Player2Name').value)">
-                            <label for="team2Player2Name">Name</label>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+
+                                <span class="text">Player 2</span>
+                                <br />
+                                <div class="form-floating mb-3 w-75">
+                                    <input type="text" class="form-control" id="player2Name" value="player2" onchange="setPlayer2Name(document.getElementById('player2Name').value)">
+                                    <label for="player2Name">Name</label>
+                                </div>
+                                <span class="text3" id="player2StateTop">Receiving</span>
+                            </div>
+
+                            <div id="team2Player2" class="col invisible">
+                                <span class="text">Partner 2</span>
+                                <div class="form-floating mb-3 w-75">
+                                    <input type="text" class="form-control" id="team2Player2Name" value="partner 2" onchange="setTeam2Player2Name(document.getElementById('team2Player2Name').value)">
+                                    <label for="team2Player2Name">Name</label>
+                                </div>
+                                <span class="text3" id="team2Player2StateTop"></span>
+                            </div>
                         </div>
-                        <span class="text3" id="team2Player2StateTop"></span>
                     </div>
 
                     <br />
                     <span class="text-light fs-2">Score:</span>
                     <span id="player2ScoreMain" class="text-light fs-2">0</span>
                     <br />
-                    <span class="text3" id="player2StateTop">Receiving</span>
                     <br />
                     <div class="btn-group gap-3" role="group">
                         <button type="button" id="player2Server" class="btn btn-secondary" onclick="setPlayer2Serving()">Set as server</button>

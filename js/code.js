@@ -272,6 +272,7 @@ function setTotalPoints(total){
 function setTeamMode(mode){
     gameSetup.team = mode
     let team1Player2 = elem('team1Player2')
+    let team2Player2 = elem('team2Player2')
 
     let selectedButton
     let unselectedButton
@@ -279,11 +280,19 @@ function setTeamMode(mode){
     if (mode == 'singles'){
         team1Player2.classList.remove('visible')
         team1Player2.classList.add('invisible')
+
+        team2Player2.classList.remove('visible')
+        team2Player2.classList.add('invisible')
+
         selectedButton = elem('teamSingles')
         unselectedButton = elem('teamDoubles')
     } else {
         team1Player2.classList.remove('invisible')
         team1Player2.classList.add('visible')
+
+        team2Player2.classList.remove('invisible')
+        team2Player2.classList.add('visible')
+
         unselectedButton = elem('teamSingles')
         selectedButton = elem('teamDoubles')
     }
