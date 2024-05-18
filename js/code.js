@@ -101,6 +101,16 @@ function makeRallyEvent(server, winningPlayer, lastHitPlayer, kind, score1, scor
     }
 }
 
+function makeScoreEvent(server, kind, score1, score2){
+    return {
+        type: "score",
+        server: server,
+        kind: kind,
+        score1: score1,
+        score2: score2,
+    }
+}
+
 function makeFaultEvent(server, score1, score2){
     return {
         type: "fault",
@@ -413,6 +423,11 @@ function updateTimeline(){
             continue
         }
 
+        if (use.type == "score"){
+            events.innerHTML += `<br /><span class="text-light fs-6">Rally ${rallyNumber}, Server: ${use.server}. Score ${use.kind}. ${use.score1} - ${use.score2}</span>`;
+            continue
+        }
+
         if (use.type == "fault"){
             events.innerHTML += `<br /><span class="text-light fs-6">Rally ${rallyNumber}, Server: ${use.server}. Fault serve. ${use.score1} - ${use.score2}</span>`;
             rallyNumber += 1
@@ -568,6 +583,10 @@ function computeStats(player){
         let use = normalized[i];
 
         if (use.type == "timeout"){
+            continue
+        }
+
+        if (use.type == "score"){
             continue
         }
 
@@ -1070,4 +1089,16 @@ function lprtStyle(){
     let list = document.body.classList
     list.add('lprt')
     list.remove('normal')
+}
+
+function scoreUp(player){
+    player.score += 1
+    timeline.push(makeScoreEvent(getServer(), `${player.name} +1`, player1.score, player2.score))
+    updateState()
+}
+
+function scoreDown(player){
+    player.score -= 1
+    timeline.push(makeScoreEvent(getServer(), `${player.name} -1`, player1.score, player2.score))
+    updateState()
 }
