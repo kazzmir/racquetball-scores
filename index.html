@@ -228,6 +228,7 @@
 
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-primary" id="player1Ace" onclick="ace(player1)">Ace serve</button>
+                            <button type="button" class="btn btn-primary" id="player1ThreeShot" onclick="threeShotRally(player1)">3 shot rally</button>
                         </div>
 
                         <div class="btn-group gap-3" role="group">
@@ -306,11 +307,19 @@
                             <td id="statsLongestRunPlayer1">0</td>
                             <td id="statsLongestRunPlayer2">0</td>
                         </tr>
+
                         <tr>
                             <th scope="row">Winners</th>
                             <td id="statsWinnersPlayer1">0</td>
                             <td id="statsWinnersPlayer2">0</td>
                         </tr>
+
+                        <tr>
+                            <th scope="row">Winners (3 shot rally)</th>
+                            <td id="stats3ShotPlayer1">0</td>
+                            <td id="stats3ShotPlayer2">0</td>
+                        </tr>
+
                         <tr>
                             <th scope="row">Winner (killshot)</th>
                             <td id="statsKillPlayer1">0</td>
@@ -331,6 +340,7 @@
                             <td id="statsDownTheLinePlayer1">0</td>
                             <td id="statsDownTheLinePlayer2">0</td>
                         </tr>
+
                         <tr>
                             <th scope="row">Winner (splat)</th>
                             <td id="statsSplatLinePlayer1">0</td>
@@ -406,6 +416,7 @@
 
                         <div class="btn-group gap-3" role="group">
                             <button type="button" class="btn btn-primary" id="player2Ace" onclick="ace(player2)">Ace serve</button>
+                            <button type="button" class="btn btn-primary" id="player2ThreeShot" onclick="threeShotRally(player2)">3 shot rally</button>
                         </div>
 
                         <div class="btn-group gap-3" role="group">

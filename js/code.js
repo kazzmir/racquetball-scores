@@ -153,7 +153,7 @@ function isError(kind){
 }
 
 function isWinner(kind){
-    return kind == 'pinch' || kind == 'down the line' || kind == 'cross court' || kind == 'splat' || kind == 'winner' || kind == 'ace' || kind == 'kill'
+    return kind == 'pinch' || kind == 'down the line' || kind == 'cross court' || kind == 'splat' || kind == 'winner' || kind == 'ace' || kind == 'kill' || kind == '3shot'
 }
 
 function isPoint(event_){
@@ -564,6 +564,7 @@ function computeStats(player){
         opportunities: player.opportunities,
         ceiling: player.ceiling,
         winners: 0,
+        threeShot: 0,
         appeals: player.appeals,
     }
 
@@ -622,6 +623,10 @@ function computeStats(player){
 
             if (use.kind == 'pinch'){
                 out.pinches += 1
+            }
+
+            if (use.kind == '3shot'){
+                out.threeShot += 1;
             }
 
             if (use.kind == 'down the line'){
@@ -693,6 +698,7 @@ function updateStats(){
         elem(`statsOpportunitiesPlayer${player}`).innerHTML = stats.opportunities
         elem(`statsCeilingBallPlayer${player}`).innerHTML = stats.ceiling
         elem(`statsWinnersPlayer${player}`).innerHTML = stats.winners
+        elem(`stats3ShotPlayer${player}`).innerHTML = stats.threeShot
         elem(`statsAppealsPlayer${player}`).innerHTML = stats.appeals
         elem(`statsKillPlayer${player}`).innerHTML = stats.kills
     }
@@ -901,6 +907,12 @@ function splatWinner(player){
     winRally(player, 'splat')
     animate();
     updateState();
+}
+
+function threeShotRally(player){
+    winRally(player, '3shot')
+    animate()
+    updateState()
 }
 
 function unforcedError(player){
