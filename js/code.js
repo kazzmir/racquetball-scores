@@ -742,13 +742,19 @@ function updateState(){
     updateStats();
 }
 
-function missedOpportunity(player){
-    player.opportunities += 1
+function missedOpportunity(player, value){
+    player.opportunities += value
+    if (player.opportunities < 0){
+        player.opportunities = 0
+    }
     updateStats();
 }
 
-function ceilingBall(player){
-    player.ceiling += 1
+function ceilingBall(player, value){
+    player.ceiling += value
+    if (player.ceiling < 0){
+        player.ceiling = 0
+    }
     updateStats();
 }
 
